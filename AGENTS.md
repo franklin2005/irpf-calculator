@@ -254,4 +254,16 @@ protected function isAccessible(User $user, ?string $path = null): bool
 - To run all tests in a file: `php artisan test --compact tests/Feature/ExampleTest.php`.
 - To filter on a particular test name: `php artisan test --compact --filter=testName` (recommended after making a change to a related file).
 
+## MCP Usage Policy
+
+- For ANY Laravel-related change (routes, controllers, views, Livewire, Flux, tests, config):
+  - Prefer using the `laravel-boost` MCP tools (especially `search-docs`, `list-artisan-commands`, `browser-logs`) before inventing solutions.
+  - Always check relevant Laravel or package documentation via `search-docs` when unsure.
+
+- For GENERAL coding tasks (non-Laravel specific logic, algorithms, refactors, patterns):
+  - The `context7` MCP server is available as an additional source of structured context and examples.
+  - You may call Context7 tools when they provide extra insight before generating or refactoring code.
+
+- Do NOT ignore Laravel Boost when working inside this Laravel repository. It should be considered the primary source of truth for Laravel-specific decisions.
+
 </laravel-boost-guidelines>

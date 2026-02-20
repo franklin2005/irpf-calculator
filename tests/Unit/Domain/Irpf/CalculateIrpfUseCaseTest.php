@@ -20,7 +20,23 @@ class CalculateIrpfUseCaseTest extends TestCase
         {
             public function byYearAndRegion(Year $year, ?Region $region = null): array
             {
-                return [];
+                return [
+                    'state_brackets' => [
+                        ['from' => 0, 'to' => 5000, 'rate' => 0.095],
+                        ['from' => 5000, 'to' => null, 'rate' => 0.12],
+                    ],
+                    'regional_brackets' => [
+                        ['from' => 0, 'to' => 5000, 'rate' => 0.10],
+                        ['from' => 5000, 'to' => null, 'rate' => 0.125],
+                    ],
+                    'personal_minimums' => [
+                        'base' => 5550,
+                    ],
+                    'family_minimums' => [
+                        'per_child' => 2400,
+                    ],
+                    'reductions' => [],
+                ];
             }
         };
 
@@ -30,8 +46,8 @@ class CalculateIrpfUseCaseTest extends TestCase
 
         $input = new TaxInput(
             grossIncome: new Money(3500000),
-            year: new Year(2025),
-            region: null,
+            year: new Year(2026),
+            region: Region::Asturias,
         );
 
         $result = $useCase->execute($input);

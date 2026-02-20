@@ -2,4 +2,7 @@
 
 namespace App\Domain\Irpf\ValueObjects;
 
-enum Region: string {}
+enum Region: string
+{
+    case Asturias = 'asturias';
+}

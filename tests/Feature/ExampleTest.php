@@ -7,13 +7,13 @@ use Tests\TestCase;
 
 class ExampleTest extends TestCase
 {
-    /**
-     * A basic test example.
-     */
-    public function test_the_application_returns_a_successful_response(): void
+    public function test_home_page_shows_hero_and_cta(): void
     {
         $response = $this->get('/');
 
-        $response->assertStatus(200);
+        $response
+            ->assertOk()
+            ->assertSee('Calculadora IRPF 2026 para Espana')
+            ->assertSee('Ir a la calculadora');
     }
 }

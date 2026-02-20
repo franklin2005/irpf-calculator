@@ -12,6 +12,7 @@ use App\Domain\Irpf\ValueObjects\Region;
 use App\Domain\Irpf\ValueObjects\Year;
 use Illuminate\Contracts\View\View;
 use Illuminate\Validation\ValidationException;
+use Livewire\Attributes\Url;
 use Livewire\Component;
 
 class IrpfCalculatorPage extends Component
@@ -20,8 +21,10 @@ class IrpfCalculatorPage extends Component
 
     public string $region = 'Asturias';
 
+    #[Url(except: null)]
     public ?int $grossIncome = null;
 
+    #[Url(except: 0)]
     public int $children = 0;
 
     public ?TaxResult $result = null;
@@ -43,6 +46,10 @@ class IrpfCalculatorPage extends Component
     public function mount(int $year): void
     {
         $this->year = $year;
+
+        if ($this->grossIncome !== null && $this->grossIncome > 0 && $this->children >= 0) {
+            $this->calculate();
+        }
     }
 
     public function calculate(): void

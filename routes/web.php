@@ -5,11 +5,48 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('home');
-});
+})->name('home');
 
 Route::get('/ui', function () {
     return view('ui');
 });
+
+Route::get('/robots.txt', function () {
+    $robotsPath = public_path('robots.txt');
+    $content = file_exists($robotsPath)
+        ? file_get_contents($robotsPath)
+        : "User-agent: *\nDisallow:\nSitemap: ".url('/sitemap.xml')."\n";
+
+    return response($content, 200)
+        ->header('Content-Type', 'text/plain; charset=UTF-8');
+});
+
+Route::get('/sitemap.xml', function () {
+    $urls = [
+        route('home'),
+        route('irpf.calculator', ['year' => 2026]),
+    ];
+
+    $lastmod = now()->toDateString();
+    $urlNodes = collect($urls)->map(function (string $location) use ($lastmod): string {
+        return <<<XML
+    <url>
+        <loc>{$location}</loc>
+        <lastmod>{$lastmod}</lastmod>
+    </url>
+XML;
+    })->implode("\n");
+
+    $xml = <<<XML
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+{$urlNodes}
+</urlset>
+XML;
+
+    return response($xml, 200)
+        ->header('Content-Type', 'application/xml; charset=UTF-8');
+})->name('sitemap');
 
 Route::get('/calculadora-irpf/{year}', IrpfCalculatorPage::class)
     ->whereNumber('year')

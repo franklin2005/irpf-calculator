@@ -1,0 +1,56 @@
+<?php
+
+namespace Tests\Feature;
+
+use Tests\TestCase;
+
+class SeoTechnicalTest extends TestCase
+{
+    public function test_home_page_responds_ok_and_shows_hero_title(): void
+    {
+        $response = $this->get('/');
+
+        $response
+            ->assertOk()
+            ->assertSee('Calculadora IRPF 2026 para Espana');
+    }
+
+    public function test_calculator_page_renders_expected_title_and_canonical_without_query(): void
+    {
+        $response = $this->get('/calculadora-irpf/2026?grossIncome=30000&children=2');
+
+        $response
+            ->assertOk()
+            ->assertSee('<title>Calculadora IRPF 2026 Asturias - Simulador de IRPF estimado</title>', false)
+            ->assertSee('<link rel="canonical" href="'.url('/calculadora-irpf/2026').'">', false);
+    }
+
+    public function test_robots_txt_is_accessible_and_contains_user_agent_rule(): void
+    {
+        $response = $this->get('/robots.txt');
+
+        $response
+            ->assertOk()
+            ->assertSee('User-agent: *');
+    }
+
+    public function test_sitemap_xml_is_accessible_and_contains_minimum_urls(): void
+    {
+        $response = $this->get('/sitemap.xml');
+
+        $response
+            ->assertOk()
+            ->assertHeader('Content-Type', 'application/xml; charset=UTF-8')
+            ->assertSee(url('/'), false)
+            ->assertSee(url('/calculadora-irpf/2026'), false);
+    }
+
+    public function test_not_found_route_uses_custom_404_page(): void
+    {
+        $response = $this->get('/ruta-que-no-existe');
+
+        $response
+            ->assertNotFound()
+            ->assertSee('Pagina no encontrada');
+    }
+}

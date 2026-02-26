@@ -11,6 +11,7 @@ use App\Domain\Irpf\ValueObjects\Money;
 use App\Domain\Irpf\ValueObjects\Region;
 use App\Domain\Irpf\ValueObjects\Year;
 use Illuminate\Contracts\View\View;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 use Livewire\Attributes\Url;
 use Livewire\Component;
@@ -24,7 +25,13 @@ class IrpfCalculatorPage extends Component
 
     public int $year = 2026;
 
-    public string $region = 'Asturias';
+    #[Url(except: 'asturias')]
+    public string $regionSlug = 'asturias';
+
+    /**
+     * @var array<string, string>
+     */
+    public array $regionOptions = [];
 
     #[Url(except: null)]
     public ?int $grossIncome = null;
@@ -55,8 +62,14 @@ class IrpfCalculatorPage extends Component
         }
 
         $this->year = $year;
+        $this->regionOptions = $this->buildRegionOptions();
 
-        if ($this->grossIncome !== null && $this->grossIncome > 0 && $this->children >= 0) {
+        if (
+            $this->grossIncome !== null
+            && $this->grossIncome > 0
+            && $this->children >= 0
+            && $this->isValidRegionSlug($this->regionSlug)
+        ) {
             $this->calculate();
         }
     }
@@ -65,23 +78,26 @@ class IrpfCalculatorPage extends Component
     {
         $this->domainError = null;
 
-        $validated = $this->validate([
-            'grossIncome' => ['required', 'integer', 'min:1'],
-            'children' => ['required', 'integer', 'min:0'],
-        ], [
+        $validated = $this->validate($this->validationRules(), [
             'grossIncome.required' => 'Debes indicar los ingresos brutos anuales.',
             'grossIncome.integer' => 'Los ingresos deben ser un numero entero en euros.',
             'grossIncome.min' => 'Los ingresos deben ser mayores que cero.',
             'children.required' => 'Debes indicar el numero de hijos.',
             'children.integer' => 'El numero de hijos debe ser un entero.',
             'children.min' => 'El numero de hijos no puede ser negativo.',
+            'year.required' => 'Debes seleccionar un ano fiscal.',
+            'year.in' => 'El ano fiscal seleccionado no es valido.',
+            'regionSlug.required' => 'Debes seleccionar una comunidad autonoma.',
+            'regionSlug.in' => 'La comunidad autonoma seleccionada no es valida.',
         ]);
 
         try {
+            $region = $this->regionFromSlug($validated['regionSlug']);
+
             $input = new TaxInput(
                 grossIncome: new Money($validated['grossIncome'] * 100),
                 year: new Year($this->year),
-                region: Region::Asturias,
+                region: $region,
                 children: $validated['children'],
             );
 
@@ -100,6 +116,32 @@ class IrpfCalculatorPage extends Component
             $this->domainError = 'Se produjo un error inesperado al calcular el IRPF.';
             report($exception);
         }
+    }
+
+    public function selectRegion(string $slug): void
+    {
+        if (! $this->isValidRegionSlug($slug)) {
+            throw ValidationException::withMessages([
+                'regionSlug' => 'La comunidad autonoma seleccionada no es valida.',
+            ]);
+        }
+
+        $this->regionSlug = $slug;
+        $this->result = null;
+        $this->resultData = null;
+    }
+
+    public function selectYear(int $year): void
+    {
+        if (! $this->isValidYear($year)) {
+            throw ValidationException::withMessages([
+                'year' => 'El ano fiscal seleccionado no es valido.',
+            ]);
+        }
+
+        $this->year = $year;
+        $this->result = null;
+        $this->resultData = null;
     }
 
     public function dehydrate(): void
@@ -132,5 +174,78 @@ class IrpfCalculatorPage extends Component
             'state_brackets_applied_count' => count($result->breakdown->stateBracketsApplied),
             'regional_brackets_applied_count' => count($result->breakdown->regionalBracketsApplied),
         ];
+    }
+
+    /**
+     * @return array<string, array<int, mixed>>
+     */
+    private function validationRules(): array
+    {
+        return [
+            'grossIncome' => ['required', 'integer', 'min:1'],
+            'children' => ['required', 'integer', 'min:0'],
+            'year' => ['required', Rule::in(self::SUPPORTED_YEARS)],
+            'regionSlug' => ['required', Rule::in(array_keys($this->regionOptions))],
+        ];
+    }
+
+    private function regionFromSlug(string $slug): Region
+    {
+        $region = Region::tryFrom($slug);
+
+        if ($region === null) {
+            throw ValidationException::withMessages([
+                'regionSlug' => 'La comunidad autonoma seleccionada no es valida.',
+            ]);
+        }
+
+        return $region;
+    }
+
+    private function isValidRegionSlug(string $slug): bool
+    {
+        return array_key_exists($slug, $this->regionOptions);
+    }
+
+    private function isValidYear(int $year): bool
+    {
+        return in_array($year, self::SUPPORTED_YEARS, true);
+    }
+
+    /**
+     * @return array<string, string>
+     */
+    private function buildRegionOptions(): array
+    {
+        $options = [];
+
+        foreach (Region::cases() as $region) {
+            $options[$region->value] = $this->labelForRegion($region);
+        }
+
+        return $options;
+    }
+
+    private function labelForRegion(Region $region): string
+    {
+        return match ($region) {
+            Region::Andalucia => "Andaluc\u{00ED}a",
+            Region::Aragon => "Arag\u{00F3}n",
+            Region::Asturias => 'Asturias',
+            Region::Baleares => 'Baleares',
+            Region::Canarias => 'Canarias',
+            Region::Cantabria => 'Cantabria',
+            Region::CastillaLaMancha => 'Castilla-La Mancha',
+            Region::CastillaYLeon => "Castilla y Le\u{00F3}n",
+            Region::Cataluna => "Catalu\u{00F1}a",
+            Region::ComunidadValenciana => 'Comunidad Valenciana',
+            Region::Extremadura => 'Extremadura',
+            Region::Galicia => 'Galicia',
+            Region::LaRioja => 'La Rioja',
+            Region::Madrid => 'Madrid',
+            Region::Murcia => 'Murcia',
+            Region::Navarra => 'Navarra',
+            Region::PaisVasco => "Pa\u{00ED}s Vasco",
+        };
     }
 }

@@ -20,23 +20,8 @@
                     <p class="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--irpf-teal)]">MVP Livewire + Flux</p>
                     <h1 class="irpf-display text-5xl leading-none text-[var(--irpf-ink)] md:text-7xl">Calculadora IRPF</h1>
                     <p class="mt-2 max-w-2xl text-sm text-[var(--irpf-muted)] md:text-base">
-                        Simulacion inicial para {{ $year }} en {{ $region }}, conectada al motor de dominio.
+                        Simulacion inicial para {{ $year }} en {{ $regionOptions[$regionSlug] ?? 'CCAA no valida' }}, conectada al motor de dominio.
                     </p>
-                    <div class="mt-3 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.14em]">
-                        <span class="text-[var(--irpf-muted)]">Ano:</span>
-                        <a
-                            href="{{ route('irpf.calculator', ['year' => 2025]) }}"
-                            class="rounded-md border px-2 py-1 transition {{ $year === 2025 ? 'border-[var(--irpf-teal)] text-[var(--irpf-teal)]' : 'border-[var(--irpf-line)] text-[var(--irpf-muted)] hover:text-[var(--irpf-ink)]' }}"
-                        >
-                            2025
-                        </a>
-                        <a
-                            href="{{ route('irpf.calculator', ['year' => 2026]) }}"
-                            class="rounded-md border px-2 py-1 transition {{ $year === 2026 ? 'border-[var(--irpf-teal)] text-[var(--irpf-teal)]' : 'border-[var(--irpf-line)] text-[var(--irpf-muted)] hover:text-[var(--irpf-ink)]' }}"
-                        >
-                            2026
-                        </a>
-                    </div>
                 </div>
                 <flux:badge color="cyan" size="sm">EPIC 5 UI MVP</flux:badge>
             </div>
@@ -58,12 +43,86 @@
                         <div class="mt-3 space-y-3">
                             <flux:field>
                                 <flux:label>Ano fiscal</flux:label>
-                                <flux:input value="{{ $year }}" readonly />
+                                <div
+                                    x-data="{ open: false }"
+                                    class="irpf-region-dropdown relative w-full"
+                                    @keydown.escape.window="open = false"
+                                >
+                                    <button
+                                        type="button"
+                                        class="irpf-region-trigger flex h-10 w-full items-center justify-between rounded-lg px-3 text-left text-sm"
+                                        @click="open = ! open"
+                                        :aria-expanded="open ? 'true' : 'false'"
+                                        aria-haspopup="listbox"
+                                    >
+                                        <span>{{ $year }}</span>
+                                        <flux:icon.chevron-down class="size-4 transition" x-bind:class="open ? 'rotate-180' : ''" />
+                                    </button>
+
+                                    <div
+                                        x-cloak
+                                        x-show="open"
+                                        x-transition.origin.top
+                                        @click.outside="open = false"
+                                        class="irpf-region-menu absolute top-[calc(100%+0.4rem)] left-0 z-40 w-full overflow-auto rounded-lg p-[.3125rem]"
+                                        role="listbox"
+                                    >
+                                        @foreach ([2025, 2026] as $yearOption)
+                                            <button
+                                                type="button"
+                                                wire:key="year-option-{{ $yearOption }}"
+                                                wire:click="selectYear({{ $yearOption }})"
+                                                @click="open = false"
+                                                class="{{ $year === $yearOption ? 'irpf-region-option-active' : 'irpf-region-option' }} flex w-full items-center rounded-md px-2 py-1.5 text-left text-sm font-medium"
+                                            >
+                                                {{ $yearOption }}
+                                            </button>
+                                        @endforeach
+                                    </div>
+                                </div>
+                                <flux:error name="year" />
                             </flux:field>
 
                             <flux:field>
-                                <flux:label>CCAA</flux:label>
-                                <flux:input value="{{ $region }}" readonly />
+                                <flux:label>Comunidad autonoma</flux:label>
+                                <div
+                                    x-data="{ open: false }"
+                                    class="irpf-region-dropdown relative w-full"
+                                    @keydown.escape.window="open = false"
+                                >
+                                    <button
+                                        type="button"
+                                        class="irpf-region-trigger flex h-10 w-full items-center justify-between rounded-lg px-3 text-left text-sm"
+                                        @click="open = ! open"
+                                        :aria-expanded="open ? 'true' : 'false'"
+                                        aria-haspopup="listbox"
+                                    >
+                                        <span>{{ $regionOptions[$regionSlug] ?? 'Selecciona una comunidad' }}</span>
+                                        <flux:icon.chevron-down class="size-4 transition" x-bind:class="open ? 'rotate-180' : ''" />
+                                    </button>
+
+                                    <div
+                                        x-cloak
+                                        x-show="open"
+                                        x-transition.origin.top
+                                        @click.outside="open = false"
+                                        class="irpf-region-menu absolute top-[calc(100%+0.4rem)] left-0 z-40 max-h-64 w-full overflow-auto rounded-lg p-[.3125rem]"
+                                        role="listbox"
+                                    >
+                                        @foreach ($regionOptions as $slug => $label)
+                                            <button
+                                                type="button"
+                                                wire:key="region-option-{{ $slug }}"
+                                                wire:click="selectRegion('{{ $slug }}')"
+                                                @click="open = false"
+                                                class="{{ $regionSlug === $slug ? 'irpf-region-option-active' : 'irpf-region-option' }} flex w-full items-center rounded-md px-2 py-1.5 text-left text-sm font-medium"
+                                            >
+                                                {{ $label }}
+                                            </button>
+                                        @endforeach
+                                    </div>
+                                </div>
+                                <flux:error name="regionSlug" />
                             </flux:field>
 
                             <flux:field>

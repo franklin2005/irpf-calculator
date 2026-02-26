@@ -37,12 +37,20 @@ class SeoTechnicalTest extends TestCase
     public function test_sitemap_xml_is_accessible_and_contains_minimum_urls(): void
     {
         $response = $this->get('/sitemap.xml');
+        $content = $response->getContent() ?: '';
 
         $response
             ->assertOk()
             ->assertHeader('Content-Type', 'application/xml; charset=UTF-8')
+            ->assertSee('<urlset', false)
             ->assertSee(url('/'), false)
-            ->assertSee(url('/calculadora-irpf/2026'), false);
+            ->assertSee(url('/calculadora-irpf/2025'), false)
+            ->assertSee(url('/calculadora-irpf/2026'), false)
+            ->assertSee(url('/irpf/2026/asturias'), false)
+            ->assertSee(url('/irpf/2025/madrid'), false)
+            ->assertSee('<lastmod>', false);
+
+        $this->assertGreaterThan(10, substr_count($content, '<url>'));
     }
 
     public function test_not_found_route_uses_custom_404_page(): void

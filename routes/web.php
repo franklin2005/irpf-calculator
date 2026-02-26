@@ -1,6 +1,8 @@
 <?php
 
+use App\Domain\Irpf\ValueObjects\Region;
 use App\Livewire\Irpf\IrpfCalculatorPage;
+use App\Livewire\Irpf\RegionInfoPage;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -34,10 +36,21 @@ Route::get('/robots.txt', function () {
 });
 
 Route::get('/sitemap.xml', function () {
-    $urls = [
-        route('home'),
-        route('irpf.calculator', ['year' => 2026]),
-    ];
+    $years = IrpfCalculatorPage::SUPPORTED_YEARS;
+    $urls = [route('home')];
+
+    foreach ($years as $year) {
+        $urls[] = route('irpf.calculator', ['year' => $year]);
+
+        foreach (Region::cases() as $region) {
+            $urls[] = route('irpf.region.show', [
+                'year' => $year,
+                'regionSlug' => $region->value,
+            ]);
+        }
+    }
+
+    $urls = array_values(array_unique($urls));
 
     $lastmod = now()->toDateString();
     $urlNodes = collect($urls)->map(function (string $location) use ($lastmod): string {
@@ -64,3 +77,8 @@ Route::get('/calculadora-irpf/{year}', IrpfCalculatorPage::class)
     ->whereNumber('year')
     ->whereIn('year', ['2025', '2026'])
     ->name('irpf.calculator');
+
+Route::get('/irpf/{year}/{regionSlug}', RegionInfoPage::class)
+    ->whereNumber('year')
+    ->whereIn('year', ['2025', '2026'])
+    ->name('irpf.region.show');

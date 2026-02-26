@@ -10,6 +10,7 @@
 
     $sectionTitle = trim($__env->yieldContent('title'));
     $sectionMetaDescription = trim($__env->yieldContent('meta_description'));
+    $sectionCanonical = trim($__env->yieldContent('canonical'));
 
     $fallbackTitle = match ($routeName) {
         'home' => 'Calculadora IRPF 2026 para Espana - Explicacion y acceso',
@@ -31,7 +32,7 @@
         ? ($sectionMetaDescription !== '' ? $sectionMetaDescription : $fallbackMetaDescription)
         : ($sectionMetaDescription !== '' ? $sectionMetaDescription : ($metaDescription ?? $fallbackMetaDescription));
 
-    $canonicalUrl = $canonical ?? request()->url();
+    $canonicalUrl = $sectionCanonical !== '' ? $sectionCanonical : ($canonical ?? request()->url());
     $openGraphUrl = request()->fullUrl();
     $openGraphLocale = app()->getLocale() === 'es'
         ? 'es_ES'

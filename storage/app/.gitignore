@@ -1,4 +1,9 @@
 *
 !private/
 !public/
+!tax/
+!tax/2025/
+!tax/2025/*.php
+!tax/2026/
+!tax/2026/*.php
 !.gitignore

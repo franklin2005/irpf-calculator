@@ -22,6 +22,21 @@
                     <p class="mt-2 max-w-2xl text-sm text-[var(--irpf-muted)] md:text-base">
                         Simulacion inicial para {{ $year }} en {{ $region }}, conectada al motor de dominio.
                     </p>
+                    <div class="mt-3 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.14em]">
+                        <span class="text-[var(--irpf-muted)]">Ano:</span>
+                        <a
+                            href="{{ route('irpf.calculator', ['year' => 2025]) }}"
+                            class="rounded-md border px-2 py-1 transition {{ $year === 2025 ? 'border-[var(--irpf-teal)] text-[var(--irpf-teal)]' : 'border-[var(--irpf-line)] text-[var(--irpf-muted)] hover:text-[var(--irpf-ink)]' }}"
+                        >
+                            2025
+                        </a>
+                        <a
+                            href="{{ route('irpf.calculator', ['year' => 2026]) }}"
+                            class="rounded-md border px-2 py-1 transition {{ $year === 2026 ? 'border-[var(--irpf-teal)] text-[var(--irpf-teal)]' : 'border-[var(--irpf-line)] text-[var(--irpf-muted)] hover:text-[var(--irpf-ink)]' }}"
+                        >
+                            2026
+                        </a>
+                    </div>
                 </div>
                 <flux:badge color="cyan" size="sm">EPIC 5 UI MVP</flux:badge>
             </div>

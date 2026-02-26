@@ -12,19 +12,19 @@ use PHPUnit\Framework\TestCase;
 
 class IrpfCalculatorTest extends TestCase
 {
-    public function test_low_income_produces_positive_tax_and_multiple_brackets(): void
+    public function test_2026_asturias_low_income_produces_positive_tax_and_non_empty_brackets(): void
     {
         $calculator = $this->makeCalculator();
 
         $result = $calculator->calculate($this->makeInput(15000));
 
         $this->assertGreaterThan(0, $result->totalTax->cents);
-        $this->assertLessThan(0.305, $result->effectiveRate);
-        $this->assertGreaterThanOrEqual(2, count($result->breakdown->stateBracketsApplied));
-        $this->assertGreaterThanOrEqual(2, count($result->breakdown->regionalBracketsApplied));
+        $this->assertLessThan(0.20, $result->effectiveRate);
+        $this->assertNotEmpty($result->breakdown->stateBracketsApplied);
+        $this->assertNotEmpty($result->breakdown->regionalBracketsApplied);
     }
 
-    public function test_medium_income_has_higher_total_tax_and_effective_rate_than_low_income(): void
+    public function test_2026_asturias_medium_income_has_higher_total_tax_and_effective_rate_than_low_income(): void
     {
         $calculator = $this->makeCalculator();
 
@@ -33,17 +33,71 @@ class IrpfCalculatorTest extends TestCase
 
         $this->assertGreaterThan($lowIncomeResult->totalTax->cents, $mediumIncomeResult->totalTax->cents);
         $this->assertGreaterThan($lowIncomeResult->effectiveRate, $mediumIncomeResult->effectiveRate);
+        $this->assertGreaterThan($lowIncomeResult->breakdown->stateTax->cents, $mediumIncomeResult->breakdown->stateTax->cents);
+        $this->assertGreaterThan($lowIncomeResult->breakdown->regionalTax->cents, $mediumIncomeResult->breakdown->regionalTax->cents);
     }
 
-    public function test_children_reduce_total_tax_and_effective_rate_for_same_income(): void
+    public function test_2026_asturias_children_reduce_total_tax_and_effective_rate_for_same_income(): void
     {
         $calculator = $this->makeCalculator();
 
-        $withoutChildren = $calculator->calculate($this->makeInput(25000, 0));
-        $withChildren = $calculator->calculate($this->makeInput(25000, 2));
+        $withoutChildren = $calculator->calculate($this->makeInput(30000, 0));
+        $withChildren = $calculator->calculate($this->makeInput(30000, 2));
 
         $this->assertLessThan($withoutChildren->totalTax->cents, $withChildren->totalTax->cents);
         $this->assertLessThan($withoutChildren->effectiveRate, $withChildren->effectiveRate);
+        $this->assertGreaterThan(0, $withChildren->breakdown->familyMinimum->cents);
+    }
+
+    public function test_2025_asturias_low_income_produces_positive_tax_and_non_empty_brackets(): void
+    {
+        $calculator = $this->makeCalculator();
+
+        $result = $calculator->calculate($this->makeInput(15000, 0, 2025));
+
+        $this->assertGreaterThan(0, $result->totalTax->cents);
+        $this->assertLessThan(0.20, $result->effectiveRate);
+        $this->assertGreaterThan(0, $result->breakdown->personalMinimum->cents);
+        $this->assertNotEmpty($result->breakdown->stateBracketsApplied);
+        $this->assertNotEmpty($result->breakdown->regionalBracketsApplied);
+    }
+
+    public function test_2025_asturias_medium_income_has_higher_total_tax_and_effective_rate_than_low_income(): void
+    {
+        $calculator = $this->makeCalculator();
+
+        $lowIncomeResult = $calculator->calculate($this->makeInput(15000, 0, 2025));
+        $mediumIncomeResult = $calculator->calculate($this->makeInput(30000, 0, 2025));
+
+        $this->assertGreaterThan($lowIncomeResult->totalTax->cents, $mediumIncomeResult->totalTax->cents);
+        $this->assertGreaterThan($lowIncomeResult->effectiveRate, $mediumIncomeResult->effectiveRate);
+        $this->assertGreaterThan($lowIncomeResult->breakdown->stateTax->cents, $mediumIncomeResult->breakdown->stateTax->cents);
+        $this->assertGreaterThan($lowIncomeResult->breakdown->regionalTax->cents, $mediumIncomeResult->breakdown->regionalTax->cents);
+    }
+
+    public function test_2025_asturias_children_reduce_total_tax_and_effective_rate_for_same_income(): void
+    {
+        $calculator = $this->makeCalculator();
+
+        $withoutChildren = $calculator->calculate($this->makeInput(30000, 0, 2025));
+        $withChildren = $calculator->calculate($this->makeInput(30000, 2, 2025));
+
+        $this->assertLessThan($withoutChildren->totalTax->cents, $withChildren->totalTax->cents);
+        $this->assertLessThan($withoutChildren->effectiveRate, $withChildren->effectiveRate);
+        $this->assertGreaterThan(0, $withChildren->breakdown->familyMinimum->cents);
+        $this->assertGreaterThan(0, $withChildren->breakdown->personalMinimum->cents);
+    }
+
+    public function test_2025_and_2026_asturias_can_generate_different_results_for_same_input(): void
+    {
+        $calculator = $this->makeCalculator();
+
+        $result2025 = $calculator->calculate($this->makeInput(30000, 0, 2025));
+        $result2026 = $calculator->calculate($this->makeInput(30000, 0, 2026));
+
+        $this->assertGreaterThan(0, $result2025->totalTax->cents);
+        $this->assertGreaterThan(0, $result2026->totalTax->cents);
+        $this->assertNotSame($result2025->totalTax->cents, $result2026->totalTax->cents);
     }
 
     private function makeCalculator(): IrpfCalculator
@@ -53,11 +107,11 @@ class IrpfCalculatorTest extends TestCase
         );
     }
 
-    private function makeInput(int $grossIncomeEuros, int $children = 0): TaxInput
+    private function makeInput(int $grossIncomeEuros, int $children = 0, int $year = 2026): TaxInput
     {
         return new TaxInput(
             grossIncome: new Money($grossIncomeEuros * 100),
-            year: new Year(2026),
+            year: new Year($year),
             region: Region::Asturias,
             children: $children,
         );

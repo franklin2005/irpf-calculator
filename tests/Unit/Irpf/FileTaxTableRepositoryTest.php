@@ -32,6 +32,22 @@ class FileTaxTableRepositoryTest extends TestCase
         $this->assertBracketsSchema($table['regional_brackets']);
     }
 
+    public function test_it_loads_tax_table_for_2025_and_asturias(): void
+    {
+        $repository = new FileTaxTableRepository($this->projectTaxTablesPath());
+
+        $table = $repository->byYearAndRegion(new Year(2025), Region::Asturias);
+
+        $this->assertArrayHasKey('state_brackets', $table);
+        $this->assertArrayHasKey('regional_brackets', $table);
+        $this->assertArrayHasKey('personal_minimums', $table);
+        $this->assertArrayHasKey('family_minimums', $table);
+        $this->assertArrayHasKey('reductions', $table);
+
+        $this->assertBracketsSchema($table['state_brackets']);
+        $this->assertBracketsSchema($table['regional_brackets']);
+    }
+
     public function test_it_throws_when_tax_table_file_is_missing(): void
     {
         $repository = new FileTaxTableRepository($this->projectTaxTablesPath());

@@ -62,5 +62,5 @@ XML;
 
 Route::get('/calculadora-irpf/{year}', IrpfCalculatorPage::class)
     ->whereNumber('year')
-    ->where('year', '2026')
+    ->whereIn('year', ['2025', '2026'])
     ->name('irpf.calculator');

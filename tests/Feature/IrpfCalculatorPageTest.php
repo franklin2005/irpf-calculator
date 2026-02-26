@@ -20,9 +20,19 @@ class IrpfCalculatorPageTest extends TestCase
             ->assertSee('Resultado orientativo');
     }
 
-    public function test_irpf_calculator_page_returns_404_for_unsupported_year(): void
+    public function test_irpf_calculator_page_is_accessible_for_2025(): void
     {
         $response = $this->get('/calculadora-irpf/2025');
+
+        $response
+            ->assertOk()
+            ->assertSee('Datos principales')
+            ->assertSee('2025');
+    }
+
+    public function test_irpf_calculator_page_returns_404_for_unsupported_year(): void
+    {
+        $response = $this->get('/calculadora-irpf/2024');
 
         $response->assertNotFound();
     }

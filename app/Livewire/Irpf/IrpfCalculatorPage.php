@@ -17,6 +17,11 @@ use Livewire\Component;
 
 class IrpfCalculatorPage extends Component
 {
+    /**
+     * @var array<int, int>
+     */
+    public const SUPPORTED_YEARS = [2025, 2026];
+
     public int $year = 2026;
 
     public string $region = 'Asturias';
@@ -45,6 +50,10 @@ class IrpfCalculatorPage extends Component
 
     public function mount(int $year): void
     {
+        if (! in_array($year, self::SUPPORTED_YEARS, true)) {
+            abort(404);
+        }
+
         $this->year = $year;
 
         if ($this->grossIncome !== null && $this->grossIncome > 0 && $this->children >= 0) {

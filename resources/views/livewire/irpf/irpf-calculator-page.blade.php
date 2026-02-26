@@ -122,13 +122,21 @@
                 </form>
 
                 <p class="mt-4 text-xs text-[var(--irpf-muted)]">
-                    Resultado orientativo: no sustituye asesoramiento fiscal profesional ni liquidaciones oficiales.
+                    Simulador en desarrollo con tablas y supuestos simplificados para fines educativos.
                 </p>
             </section>
 
             <section class="irpf-panel rounded-3xl p-5 md:p-7">
                 <flux:heading size="xl" class="irpf-display text-4xl text-[var(--irpf-ink)] md:text-5xl">Resultado</flux:heading>
                 <flux:text class="mt-2 text-sm text-[var(--irpf-muted)]">Resumen fiscal y detalle de calculo.</flux:text>
+
+                <flux:callout color="amber" icon="shield-exclamation" class="mt-4 rounded-2xl">
+                    <flux:callout.heading>Aviso importante</flux:callout.heading>
+                    <flux:callout.text>
+                        Esta calculadora ofrece un calculo aproximado del IRPF con fines informativos y educativos.
+                        No constituye asesoria fiscal profesional. Para decisiones importantes, consulta con una persona profesional o la Agencia Tributaria.
+                    </flux:callout.text>
+                </flux:callout>
 
                 <flux:callout color="amber" icon="information-circle" class="mt-5 rounded-2xl {{ $hasResult ? 'hidden' : '' }}">
                     <flux:callout.heading>Introduce tus datos y calcula</flux:callout.heading>
@@ -189,5 +197,13 @@
                 </div>
             </section>
         </main>
+
+        <!-- Reserva de altura para evitar CLS cuando se carguen anuncios en futuras integraciones -->
+        <section class="ad-slot irpf-soft-card min-h-32 rounded-3xl p-5" aria-label="Espacio para anuncios">
+            <p class="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--irpf-muted)]">Espacio para anuncios</p>
+            <p class="mt-2 text-sm text-[var(--irpf-muted)]">
+                Zona reservada para integraciones futuras de publicidad (Google Ads u otros), sin scripts de terceros en este MVP.
+            </p>
+        </section>
     </div>
 </div>

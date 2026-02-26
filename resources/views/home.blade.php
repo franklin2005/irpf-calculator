@@ -18,6 +18,14 @@
                 </div>
             </section>
 
+            <!-- Reserva de altura para evitar CLS cuando se carguen anuncios en futuras integraciones -->
+            <section class="ad-slot irpf-soft-card mt-6 min-h-28 rounded-3xl p-5" aria-label="Espacio para anuncios">
+                <p class="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--irpf-muted)]">Espacio para anuncios</p>
+                <p class="mt-2 text-sm text-[var(--irpf-muted)]">
+                    Bloque reservado para integraciones futuras de publicidad (Google Ads u otros), sin scripts de terceros por ahora.
+                </p>
+            </section>
+
             <section class="mt-6 grid gap-6 lg:grid-cols-3">
                 <article class="irpf-soft-card rounded-3xl p-5">
                     <h2 class="text-lg font-semibold text-[var(--irpf-ink)]">Que incluye</h2>

@@ -11,6 +11,18 @@ Route::get('/ui', function () {
     return view('ui');
 });
 
+Route::get('/aviso-legal', function () {
+    return view('legal.notice');
+})->name('legal.notice');
+
+Route::get('/politica-privacidad', function () {
+    return view('legal.privacy');
+})->name('legal.privacy');
+
+Route::get('/politica-cookies', function () {
+    return view('legal.cookies');
+})->name('legal.cookies');
+
 Route::get('/robots.txt', function () {
     $robotsPath = public_path('robots.txt');
     $content = file_exists($robotsPath)

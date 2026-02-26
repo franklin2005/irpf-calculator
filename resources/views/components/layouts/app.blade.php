@@ -1,4 +1,4 @@
-@props([
+﻿@props([
     'title' => null,
     'metaDescription' => null,
     'canonical' => null,
@@ -76,12 +76,19 @@
         {{ $slot }}
 
         <footer class="border-t border-[var(--irpf-line)]/60 bg-black/20">
-            <div class="mx-auto flex w-full max-w-6xl flex-col gap-3 px-4 py-4 text-xs text-[var(--irpf-muted)] md:flex-row md:items-center md:justify-between md:px-8">
-                <p>Proyecto educativo de simulacion IRPF. Resultado orientativo.</p>
-                <div class="flex items-center gap-3">
-                    <a href="{{ url('/aviso-legal') }}" class="transition hover:text-[var(--irpf-ink)]">Aviso legal</a>
-                    <a href="{{ url('/privacidad') }}" class="transition hover:text-[var(--irpf-ink)]">Privacidad</a>
+            <div class="mx-auto w-full max-w-6xl px-4 py-4 text-xs text-[var(--irpf-muted)] md:px-8">
+                <div class="flex flex-wrap items-center gap-3">
+                    <a href="{{ route('home') }}" class="transition hover:text-[var(--irpf-ink)]">Inicio</a>
+                    <a href="{{ route('irpf.calculator', ['year' => 2026]) }}" class="transition hover:text-[var(--irpf-ink)]">Calculadora 2026</a>
+                    <a href="{{ route('legal.notice') }}" class="transition hover:text-[var(--irpf-ink)]">Aviso legal</a>
+                    <a href="{{ route('legal.privacy') }}" class="transition hover:text-[var(--irpf-ink)]">Politica de privacidad</a>
+                    <a href="{{ route('legal.cookies') }}" class="transition hover:text-[var(--irpf-ink)]">Politica de cookies</a>
                 </div>
+                <p class="mt-3">Proyecto educativo de simulacion IRPF. Resultado orientativo.</p>
+                <p class="mt-2">
+                    Este sitio puede utilizar cookies tecnicas y, en el futuro, herramientas de analisis o publicidad.
+                    Consulta la <a href="{{ route('legal.cookies') }}" class="underline underline-offset-2 transition hover:text-[var(--irpf-ink)]">Politica de cookies</a>.
+                </p>
             </div>
         </footer>
 

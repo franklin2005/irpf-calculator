@@ -94,6 +94,14 @@ class IrpfCalculatorPage extends Component
         try {
             $region = $this->regionFromSlug($validated['regionSlug']);
 
+            if ($this->isUnsupportedForalRegion($region)) {
+                $this->result = null;
+                $this->resultData = null;
+                $this->domainError = $this->unsupportedForalRegionMessage();
+
+                return;
+            }
+
             $input = new TaxInput(
                 grossIncome: new Money($validated['grossIncome'] * 100),
                 year: new Year($this->year),
@@ -218,6 +226,16 @@ class IrpfCalculatorPage extends Component
     private function isValidYear(int $year): bool
     {
         return in_array($year, self::SUPPORTED_YEARS, true);
+    }
+
+    private function isUnsupportedForalRegion(Region $region): bool
+    {
+        return $region === Region::Navarra || $region === Region::PaisVasco;
+    }
+
+    private function unsupportedForalRegionMessage(): string
+    {
+        return "Navarra y País Vasco aplican un sistema fiscal propio (régimen foral), con reglas distintas a las del IRPF estatal + autonómico.\n\nPor eso, esta calculadora —basada en el régimen común— no puede generar un resultado válido para estas comunidades.\n\nEstamos desarrollando una versión compatible con el régimen foral.";
     }
 
     /**

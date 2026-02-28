@@ -16,10 +16,13 @@ return [
     // Progressive Asturias regional brackets for 2026.
     'regional_brackets' => [
         ['from' => 0, 'to' => 12450, 'rate' => 0.10],
-        ['from' => 12450, 'to' => 20200, 'rate' => 0.12],
-        ['from' => 20200, 'to' => 35200, 'rate' => 0.15],
-        ['from' => 35200, 'to' => 60000, 'rate' => 0.19],
-        ['from' => 60000, 'to' => null, 'rate' => 0.23],
+        ['from' => 12450, 'to' => 17707, 'rate' => 0.12],
+        ['from' => 17707, 'to' => 33007, 'rate' => 0.14],
+        ['from' => 33007, 'to' => 53407, 'rate' => 0.185],
+        ['from' => 53407, 'to' => 70000, 'rate' => 0.215],
+        ['from' => 70000, 'to' => 90000, 'rate' => 0.225],
+        ['from' => 90000, 'to' => 175000, 'rate' => 0.25],
+        ['from' => 175000, 'to' => null, 'rate' => 0.255],
     ],
     // Personal minimums used to reduce taxable base in this MVP.
     // The calculator currently uses only "base".

@@ -9,11 +9,11 @@ return [
         ['from' => 60000, 'to' => null, 'rate' => 0.225]
     ],
     'regional_brackets' => [
-        ['from' => 0, 'to' => 12450, 'rate' => 0.097],
-        ['from' => 12450, 'to' => 20200, 'rate' => 0.122],
-        ['from' => 20200, 'to' => 35200, 'rate' => 0.152],
-        ['from' => 35200, 'to' => 60000, 'rate' => 0.187],
-        ['from' => 60000, 'to' => null, 'rate' => 0.227]
+        ['from' => 0, 'to' => 12450, 'rate' => 0.09],
+        ['from' => 12450, 'to' => 20200, 'rate' => 0.12],
+        ['from' => 20200, 'to' => 35200, 'rate' => 0.14],
+        ['from' => 35200, 'to' => 53407, 'rate' => 0.185],
+        ['from' => 53407, 'to' => null, 'rate' => 0.215]
     ],
     'personal_minimums' => [
         'base' => 5625,

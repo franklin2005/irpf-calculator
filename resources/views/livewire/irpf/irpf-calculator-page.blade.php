@@ -1,6 +1,9 @@
 <div wire:replace.self class="irpf-app-bg min-h-screen">
     @php
         $hasResult = $resultData !== null;
+        $isUnsupportedForalError = $domainError !== null
+            && (\Illuminate\Support\Str::of($domainError)->lower()->contains('régimen foral')
+                || \Illuminate\Support\Str::of($domainError)->lower()->contains('regimen foral'));
         $grossIncomeEur = $resultData['gross_income_eur'] ?? 0;
         $netTaxableBaseEur = $resultData['net_taxable_base_eur'] ?? 0;
         $totalTaxEur = $resultData['total_tax_eur'] ?? 0;
@@ -26,11 +29,6 @@
                 <flux:badge color="cyan" size="sm">EPIC 5 UI MVP</flux:badge>
             </div>
         </header>
-
-        <flux:callout color="red" icon="exclamation-triangle" class="rounded-2xl {{ $domainError === null ? 'hidden' : '' }}">
-            <flux:callout.heading>Error de calculo</flux:callout.heading>
-            <flux:callout.text>{{ $domainError }}</flux:callout.text>
-        </flux:callout>
 
         <main class="grid gap-6 lg:grid-cols-[1fr_1.15fr]">
             <section class="irpf-panel rounded-3xl p-5 md:p-7">
@@ -123,6 +121,9 @@
                                     </div>
                                 </div>
                                 <flux:error name="regionSlug" />
+                                <p class="mt-1 text-xs text-[var(--irpf-muted)]">
+                                    Navarra y Pais Vasco tienen regimen fiscal propio; los calculos aqui son solo para regimen comun.
+                                </p>
                             </flux:field>
 
                             <flux:field>
@@ -212,6 +213,11 @@
             <section class="irpf-panel rounded-3xl p-5 md:p-7">
                 <flux:heading size="xl" class="irpf-display text-4xl text-[var(--irpf-ink)] md:text-5xl">Resultado</flux:heading>
                 <flux:text class="mt-2 text-sm text-[var(--irpf-muted)]">Resumen fiscal y detalle de calculo.</flux:text>
+
+                <flux:callout color="red" icon="exclamation-triangle" class="mt-4 rounded-2xl {{ $domainError === null ? 'hidden' : '' }}">
+                    <flux:callout.heading>{{ $isUnsupportedForalError ? 'Régimen foral no incluido por ahora' : 'Error de cálculo' }}</flux:callout.heading>
+                    <flux:callout.text class="{{ $isUnsupportedForalError ? 'whitespace-pre-line' : '' }}">{{ $domainError }}</flux:callout.text>
+                </flux:callout>
 
                 <flux:callout color="amber" icon="shield-exclamation" class="mt-4 rounded-2xl">
                     <flux:callout.heading>Aviso importante</flux:callout.heading>

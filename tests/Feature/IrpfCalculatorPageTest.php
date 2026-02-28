@@ -161,4 +161,26 @@ class IrpfCalculatorPageTest extends TestCase
         $this->assertArrayHasKey('total_tax_eur', $result2026);
         $this->assertNotSame($result2025['total_tax_eur'], $result2026['total_tax_eur']);
     }
+
+    public function test_irpf_calculator_page_shows_not_supported_message_for_navarra(): void
+    {
+        $response = $this->get('/calculadora-irpf/2026?regionSlug=navarra&grossIncome=30000&children=1');
+
+        $response
+            ->assertOk()
+            ->assertSee('Régimen foral no incluido por ahora')
+            ->assertSee('Navarra y País Vasco aplican un sistema fiscal propio (régimen foral)')
+            ->assertSee('resultData&quot;:null', false);
+    }
+
+    public function test_irpf_calculator_page_shows_not_supported_message_for_pais_vasco(): void
+    {
+        $response = $this->get('/calculadora-irpf/2026?regionSlug=pais_vasco&grossIncome=30000&children=1');
+
+        $response
+            ->assertOk()
+            ->assertSee('Régimen foral no incluido por ahora')
+            ->assertSee('esta calculadora —basada en el régimen común— no puede generar un resultado válido para estas comunidades')
+            ->assertSee('resultData&quot;:null', false);
+    }
 }

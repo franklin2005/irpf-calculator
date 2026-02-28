@@ -103,6 +103,14 @@ class IrpfCalculatorPage extends Component
 
             $this->result = $this->calculateIrpfUseCase->execute($input);
             $this->resultData = $this->mapResultForView($this->result);
+            $this->dispatch('irpf-calculated',
+                year: $this->year,
+                regionSlug: $validated['regionSlug'],
+                grossIncome: $validated['grossIncome'],
+                children: $validated['children'],
+                totalTax: round($this->result->totalTax->cents / 100, 2),
+                effectiveRate: round($this->result->effectiveRate * 100, 2),
+            );
         } catch (MissingTaxTableException|InvalidTaxTableSchemaException $exception) {
             $this->result = null;
             $this->resultData = null;

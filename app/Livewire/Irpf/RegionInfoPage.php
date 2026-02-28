@@ -66,6 +66,11 @@ class RegionInfoPage extends Component
 
         $this->loadBrackets($year, $region);
         $this->exampleResults = $this->buildExampleResults($year, $region);
+        $this->dispatch('region-page-viewed',
+            year: $this->year,
+            regionSlug: $this->regionSlug,
+            regionName: $this->regionName,
+        );
     }
 
     public function render(): View

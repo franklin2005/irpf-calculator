@@ -138,3 +138,27 @@
         </section>
     </div>
 </div>
+
+<script>
+    (() => {
+        if (window.__regionAnalyticsBound) {
+            return;
+        }
+
+        window.__regionAnalyticsBound = true;
+
+        window.addEventListener('region-page-viewed', (event) => {
+            if (typeof window.gtag !== 'function') {
+                return;
+            }
+
+            const detail = event.detail ?? {};
+
+            window.gtag('event', 'view_region_page', {
+                year: detail.year ?? null,
+                region_slug: detail.regionSlug ?? null,
+                region_name: detail.regionName ?? null,
+            });
+        });
+    })();
+</script>

@@ -37,6 +37,8 @@
     $openGraphLocale = app()->getLocale() === 'es'
         ? 'es_ES'
         : str_replace('-', '_', app()->getLocale());
+    $ga4MeasurementId = trim((string) config('services.analytics.ga4_id'));
+    $ga4MeasurementId = $ga4MeasurementId !== '' ? $ga4MeasurementId : null;
 @endphp
 
 <!DOCTYPE html>
@@ -53,6 +55,15 @@
         <meta property="og:type" content="website">
         <meta property="og:url" content="{{ $openGraphUrl }}">
         <meta property="og:locale" content="{{ $openGraphLocale }}">
+        @if ($ga4MeasurementId !== null)
+            <script async src="https://www.googletagmanager.com/gtag/js?id={{ $ga4MeasurementId }}"></script>
+            <script>
+                window.dataLayer = window.dataLayer || [];
+                function gtag() { dataLayer.push(arguments); }
+                gtag('js', new Date());
+                gtag('config', '{{ $ga4MeasurementId }}');
+            </script>
+        @endif
 
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

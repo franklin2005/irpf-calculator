@@ -164,6 +164,15 @@
 
                                 try {
                                     await navigator.clipboard.writeText(window.location.href);
+                                    if (typeof window.gtag === 'function') {
+                                        window.gtag('event', 'copy_link', {
+                                            year: $wire.year,
+                                            region_slug: $wire.regionSlug,
+                                            gross_income: $wire.grossIncome,
+                                            children: $wire.children,
+                                        });
+                                    }
+
                                     this.copied = true;
                                     setTimeout(() => {
                                         this.copied = false;
@@ -245,7 +254,7 @@
                         <p class="mb-2 text-sm font-medium text-[var(--irpf-muted)]">Ver detalle del calculo</p>
 
                         <details class="irpf-soft-card rounded-2xl p-4">
-                            <summary class="cursor-pointer text-sm font-semibold text-[var(--irpf-ink)]">Detalle minimos</summary>
+                            <summary data-breakdown-summary class="cursor-pointer text-sm font-semibold text-[var(--irpf-ink)]">Detalle minimos</summary>
                             <div class="mt-3 grid gap-2 text-sm text-[var(--irpf-muted)]">
                                 <p>Minimo personal: <strong class="text-[var(--irpf-ink)]">{{ number_format($personalMinimumEur, 2, ',', '.') }} EUR</strong></p>
                                 <p>Minimo familiar: <strong class="text-[var(--irpf-ink)]">{{ number_format($familyMinimumEur, 2, ',', '.') }} EUR</strong></p>
@@ -253,7 +262,7 @@
                         </details>
 
                         <details class="irpf-soft-card mt-3 rounded-2xl p-4">
-                            <summary class="cursor-pointer text-sm font-semibold text-[var(--irpf-ink)]">Detalle cuota estatal/autonomica</summary>
+                            <summary data-breakdown-summary class="cursor-pointer text-sm font-semibold text-[var(--irpf-ink)]">Detalle cuota estatal/autonomica</summary>
                             <div class="mt-3 grid gap-2 text-sm text-[var(--irpf-muted)]">
                                 <p>Cuota estatal: <strong class="text-[var(--irpf-ink)]">{{ number_format($stateTaxEur, 2, ',', '.') }} EUR</strong></p>
                                 <p>Cuota autonomica: <strong class="text-[var(--irpf-ink)]">{{ number_format($regionalTaxEur, 2, ',', '.') }} EUR</strong></p>
@@ -261,7 +270,7 @@
                         </details>
 
                         <details class="irpf-soft-card mt-3 rounded-2xl p-4">
-                            <summary class="cursor-pointer text-sm font-semibold text-[var(--irpf-ink)]">Tramos aplicados</summary>
+                            <summary data-breakdown-summary class="cursor-pointer text-sm font-semibold text-[var(--irpf-ink)]">Tramos aplicados</summary>
                             <div class="mt-3 grid gap-2 text-sm text-[var(--irpf-muted)]">
                                 <p>Tramos estatales aplicados: <strong class="text-[var(--irpf-ink)]">{{ $stateBracketsCount }}</strong></p>
                                 <p>Tramos autonomicos aplicados: <strong class="text-[var(--irpf-ink)]">{{ $regionalBracketsCount }}</strong></p>
@@ -281,3 +290,61 @@
         </section>
     </div>
 </div>
+
+<script>
+    (() => {
+        if (window.__irpfAnalyticsBound) {
+            return;
+        }
+
+        window.__irpfAnalyticsBound = true;
+
+        window.addEventListener('irpf-calculated', (event) => {
+            if (typeof window.gtag !== 'function') {
+                return;
+            }
+
+            const detail = event.detail ?? {};
+
+            window.gtag('event', 'calculate_irpf', {
+                year: detail.year ?? null,
+                region_slug: detail.regionSlug ?? null,
+                gross_income: detail.grossIncome ?? null,
+                children: detail.children ?? null,
+                total_tax: detail.totalTax ?? null,
+                effective_rate: detail.effectiveRate ?? null,
+            });
+        });
+
+        document.addEventListener('click', (event) => {
+            if (window.__irpfBreakdownTracked) {
+                return;
+            }
+
+            const summaryElement = event.target.closest('summary[data-breakdown-summary]');
+
+            if (!summaryElement) {
+                return;
+            }
+
+            requestAnimationFrame(() => {
+                const detailsElement = summaryElement.closest('details');
+
+                if (!detailsElement || !detailsElement.open || window.__irpfBreakdownTracked) {
+                    return;
+                }
+
+                window.__irpfBreakdownTracked = true;
+
+                if (typeof window.gtag !== 'function') {
+                    return;
+                }
+
+                window.gtag('event', 'view_breakdown', {
+                    year: @json($year),
+                    region_slug: @json($regionSlug),
+                });
+            });
+        }, true);
+    })();
+</script>

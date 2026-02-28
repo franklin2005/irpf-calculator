@@ -6,6 +6,29 @@ use Tests\TestCase;
 
 class SeoTechnicalTest extends TestCase
 {
+    public function test_layout_does_not_render_ga4_snippet_when_id_is_missing(): void
+    {
+        config(['services.analytics.ga4_id' => null]);
+
+        $response = $this->get('/');
+
+        $response
+            ->assertOk()
+            ->assertDontSee('googletagmanager.com/gtag/js?id=', false);
+    }
+
+    public function test_layout_renders_ga4_snippet_when_id_is_configured(): void
+    {
+        config(['services.analytics.ga4_id' => 'G-TEST1234']);
+
+        $response = $this->get('/');
+
+        $response
+            ->assertOk()
+            ->assertSee('https://www.googletagmanager.com/gtag/js?id=G-TEST1234', false)
+            ->assertSee("gtag('config', 'G-TEST1234');", false);
+    }
+
     public function test_home_page_responds_ok_and_shows_hero_title(): void
     {
         $response = $this->get('/');

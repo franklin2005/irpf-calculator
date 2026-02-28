@@ -34,7 +34,11 @@ final class IrpfCalculator
 
         $stateTax = new Money($stateCalculation['total_tax_cents']);
         $regionalTax = new Money($regionalCalculation['total_tax_cents']);
-        $totalTax = new Money($stateTax->cents + $regionalTax->cents);
+        $grossTax = new Money($stateTax->cents + $regionalTax->cents);
+        $ceutaMelillaDeduction = $input->ceutaMelilla
+            ? new Money((int) round($grossTax->cents * 0.60, 0, PHP_ROUND_HALF_UP))
+            : Money::zero();
+        $totalTax = new Money($grossTax->cents - $ceutaMelillaDeduction->cents);
         $effectiveRate = $taxableBase->cents > 0 ? $totalTax->cents / $taxableBase->cents : 0.0;
 
         return new TaxResult(
@@ -49,6 +53,8 @@ final class IrpfCalculator
                 netTaxableBase: $netTaxableBase,
                 stateTax: $stateTax,
                 regionalTax: $regionalTax,
+                grossTax: $grossTax,
+                ceutaMelillaDeduction: $ceutaMelillaDeduction,
                 stateBracketsApplied: $stateCalculation['applied_brackets'],
                 regionalBracketsApplied: $regionalCalculation['applied_brackets'],
             ),

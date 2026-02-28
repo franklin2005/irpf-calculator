@@ -23,6 +23,8 @@ class IrpfCalculatorPage extends Component
      */
     public const SUPPORTED_YEARS = [2025, 2026];
 
+    public const CEUTA_MELILLA_SLUG = 'ceuta_melilla';
+
     public int $year = 2026;
 
     #[Url(except: 'asturias')]
@@ -38,6 +40,8 @@ class IrpfCalculatorPage extends Component
 
     #[Url(except: 0)]
     public int $children = 0;
+
+    public bool $ceutaMelilla = false;
 
     public ?TaxResult $result = null;
 
@@ -63,6 +67,7 @@ class IrpfCalculatorPage extends Component
 
         $this->year = $year;
         $this->regionOptions = $this->buildRegionOptions();
+        $this->ceutaMelilla = $this->shouldApplyCeutaMelillaBonus($this->regionSlug);
 
         if (
             $this->grossIncome !== null
@@ -93,6 +98,8 @@ class IrpfCalculatorPage extends Component
 
         try {
             $region = $this->regionFromSlug($validated['regionSlug']);
+            $applyCeutaMelillaBonus = $this->shouldApplyCeutaMelillaBonus($validated['regionSlug']);
+            $this->ceutaMelilla = $applyCeutaMelillaBonus;
 
             if ($this->isUnsupportedForalRegion($region)) {
                 $this->result = null;
@@ -107,6 +114,7 @@ class IrpfCalculatorPage extends Component
                 year: new Year($this->year),
                 region: $region,
                 children: $validated['children'],
+                ceutaMelilla: $applyCeutaMelillaBonus,
             );
 
             $this->result = $this->calculateIrpfUseCase->execute($input);
@@ -116,6 +124,7 @@ class IrpfCalculatorPage extends Component
                 regionSlug: $validated['regionSlug'],
                 grossIncome: $validated['grossIncome'],
                 children: $validated['children'],
+                ceutaMelilla: $applyCeutaMelillaBonus,
                 totalTax: round($this->result->totalTax->cents / 100, 2),
                 effectiveRate: round($this->result->effectiveRate * 100, 2),
             );
@@ -143,6 +152,7 @@ class IrpfCalculatorPage extends Component
         }
 
         $this->regionSlug = $slug;
+        $this->ceutaMelilla = $this->shouldApplyCeutaMelillaBonus($slug);
         $this->result = null;
         $this->resultData = null;
     }
@@ -187,6 +197,8 @@ class IrpfCalculatorPage extends Component
             'family_minimum_eur' => $result->breakdown->familyMinimum->cents / 100,
             'state_tax_eur' => $result->breakdown->stateTax->cents / 100,
             'regional_tax_eur' => $result->breakdown->regionalTax->cents / 100,
+            'gross_tax_eur' => $result->breakdown->grossTax->cents / 100,
+            'ceuta_melilla_deduction_eur' => $result->breakdown->ceutaMelillaDeduction->cents / 100,
             'state_brackets_applied_count' => count($result->breakdown->stateBracketsApplied),
             'regional_brackets_applied_count' => count($result->breakdown->regionalBracketsApplied),
         ];
@@ -207,6 +219,10 @@ class IrpfCalculatorPage extends Component
 
     private function regionFromSlug(string $slug): Region
     {
+        if ($slug === self::CEUTA_MELILLA_SLUG) {
+            return Region::Andalucia;
+        }
+
         $region = Region::tryFrom($slug);
 
         if ($region === null) {
@@ -249,7 +265,14 @@ class IrpfCalculatorPage extends Component
             $options[$region->value] = $this->labelForRegion($region);
         }
 
+        $options[self::CEUTA_MELILLA_SLUG] = 'Ceuta y Melilla (bonificacion 60%)';
+
         return $options;
+    }
+
+    private function shouldApplyCeutaMelillaBonus(string $regionSlug): bool
+    {
+        return $regionSlug === self::CEUTA_MELILLA_SLUG;
     }
 
     private function labelForRegion(Region $region): string

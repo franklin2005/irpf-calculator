@@ -59,6 +59,43 @@ class IrpfCalculatorPageTest extends TestCase
             });
     }
 
+    public function test_livewire_component_applies_ceuta_melilla_bonus_when_region_slug_is_ceuta_melilla(): void
+    {
+        $normalCalculation = Livewire::test(IrpfCalculatorPage::class, ['year' => 2026])
+            ->set('regionSlug', 'andalucia')
+            ->set('grossIncome', 30000)
+            ->set('children', 0)
+            ->call('calculate')
+            ->assertHasNoErrors();
+
+        $normalResult = $normalCalculation->get('resultData');
+
+        $bonusCalculation = Livewire::test(IrpfCalculatorPage::class, ['year' => 2026])
+            ->set('regionSlug', 'ceuta_melilla')
+            ->set('grossIncome', 30000)
+            ->set('children', 0)
+            ->call('calculate')
+            ->assertHasNoErrors()
+            ->assertSee('Bonificacion Ceuta/Melilla (60%)');
+
+        $bonusResult = $bonusCalculation->get('resultData');
+
+        $this->assertIsArray($normalResult);
+        $this->assertIsArray($bonusResult);
+        $this->assertArrayHasKey('total_tax_eur', $normalResult);
+        $this->assertArrayHasKey('total_tax_eur', $bonusResult);
+        $this->assertArrayHasKey('ceuta_melilla_deduction_eur', $bonusResult);
+        $this->assertGreaterThan(0, $normalResult['total_tax_eur']);
+        $this->assertGreaterThan(0, $bonusResult['ceuta_melilla_deduction_eur']);
+        $this->assertLessThan($normalResult['total_tax_eur'], $bonusResult['total_tax_eur']);
+
+        $response = $this->get('/calculadora-irpf/2026?regionSlug=ceuta_melilla&grossIncome=30000&children=0');
+
+        $response
+            ->assertOk()
+            ->assertSee('Bonificacion Ceuta/Melilla');
+    }
+
     public function test_livewire_component_reads_query_string_properties(): void
     {
         Livewire::withQueryParams([

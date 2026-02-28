@@ -14,6 +14,7 @@ final readonly class TaxInput
         public Year $year,
         public ?Region $region = null,
         public int $children = 0,
+        public bool $ceutaMelilla = false,
     ) {
         if ($this->children < 0) {
             throw new InvalidArgumentException('Children must be zero or greater.');

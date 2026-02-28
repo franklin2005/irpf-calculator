@@ -29,6 +29,8 @@ final readonly class TaxBreakdown
         public Money $netTaxableBase,
         public Money $stateTax,
         public Money $regionalTax,
+        public Money $grossTax,
+        public Money $ceutaMelillaDeduction,
         public array $stateBracketsApplied = [],
         public array $regionalBracketsApplied = [],
     ) {}

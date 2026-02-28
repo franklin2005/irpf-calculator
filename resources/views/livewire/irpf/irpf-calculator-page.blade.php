@@ -12,8 +12,16 @@
         $familyMinimumEur = $resultData['family_minimum_eur'] ?? 0;
         $stateTaxEur = $resultData['state_tax_eur'] ?? 0;
         $regionalTaxEur = $resultData['regional_tax_eur'] ?? 0;
+        $grossTaxEur = $resultData['gross_tax_eur'] ?? 0;
+        $ceutaMelillaDeductionEur = $resultData['ceuta_melilla_deduction_eur'] ?? 0;
         $stateBracketsCount = $resultData['state_brackets_applied_count'] ?? 0;
         $regionalBracketsCount = $resultData['regional_brackets_applied_count'] ?? 0;
+        $foralErrorParagraphs = $isUnsupportedForalError
+            ? array_values(array_filter(array_map(
+                static fn (string $paragraph): string => trim($paragraph),
+                preg_split('/\R{2,}/u', trim((string) $domainError)) ?: []
+            )))
+            : [];
     @endphp
 
     <div class="mx-auto flex w-full max-w-6xl flex-col gap-6 px-4 py-6 md:px-8 md:py-10">
@@ -151,9 +159,22 @@
 
                     <article class="irpf-soft-card rounded-2xl p-4">
                         <flux:heading size="sm">Deducciones (MVP)</flux:heading>
-                        <p class="mt-3 text-sm text-[var(--irpf-muted)]">
-                            Las deducciones avanzadas se incorporaran en versiones posteriores. En este MVP no se aplican.
-                        </p>
+                        <div class="mt-3 space-y-3">
+                            @if ($regionSlug === 'ceuta_melilla')
+                                <p class="text-sm text-[var(--irpf-muted)]">
+                                    Bonificacion Ceuta/Melilla activa: se aplica automaticamente una deduccion del 60% sobre la cuota.
+                                </p>
+                            @else
+                                <p class="text-sm text-[var(--irpf-muted)]">
+                                    La bonificacion Ceuta/Melilla (60%) se aplica automaticamente al seleccionar
+                                    <strong class="text-[var(--irpf-ink)]">Ceuta y Melilla (bonificacion 60%)</strong>
+                                    como comunidad.
+                                </p>
+                            @endif
+                            <p class="text-xs text-[var(--irpf-muted)]">
+                                El resto de deducciones avanzadas se incorporaran en versiones posteriores.
+                            </p>
+                        </div>
                     </article>
 
                     <div
@@ -216,7 +237,15 @@
 
                 <flux:callout color="red" icon="exclamation-triangle" class="mt-4 rounded-2xl {{ $domainError === null ? 'hidden' : '' }}">
                     <flux:callout.heading>{{ $isUnsupportedForalError ? 'Régimen foral no incluido por ahora' : 'Error de cálculo' }}</flux:callout.heading>
-                    <flux:callout.text class="{{ $isUnsupportedForalError ? 'whitespace-pre-line' : '' }}">{{ $domainError }}</flux:callout.text>
+                    @if ($isUnsupportedForalError)
+                        <flux:callout.text class="space-y-2">
+                            @foreach ($foralErrorParagraphs as $paragraph)
+                                <p>{{ $paragraph }}</p>
+                            @endforeach
+                        </flux:callout.text>
+                    @else
+                        <flux:callout.text>{{ $domainError }}</flux:callout.text>
+                    @endif
                 </flux:callout>
 
                 <flux:callout color="amber" icon="shield-exclamation" class="mt-4 rounded-2xl">
@@ -272,6 +301,14 @@
                             <div class="mt-3 grid gap-2 text-sm text-[var(--irpf-muted)]">
                                 <p>Cuota estatal: <strong class="text-[var(--irpf-ink)]">{{ number_format($stateTaxEur, 2, ',', '.') }} EUR</strong></p>
                                 <p>Cuota autonomica: <strong class="text-[var(--irpf-ink)]">{{ number_format($regionalTaxEur, 2, ',', '.') }} EUR</strong></p>
+                                <p>Cuota antes de bonificacion Ceuta/Melilla: <strong class="text-[var(--irpf-ink)]">{{ number_format($grossTaxEur, 2, ',', '.') }} EUR</strong></p>
+                                @if ($ceutaMelillaDeductionEur > 0)
+                                    <p>Bonificacion Ceuta/Melilla (60%): <strong class="text-[var(--irpf-teal)]">-{{ number_format($ceutaMelillaDeductionEur, 2, ',', '.') }} EUR</strong></p>
+                                @endif
+                                <p>Cuota total a pagar: <strong class="text-[var(--irpf-amber)]">{{ number_format($totalTaxEur, 2, ',', '.') }} EUR</strong></p>
+                                <p class="pt-1 text-xs text-[var(--irpf-muted)]">
+                                    Nota: esta bonificacion se muestra con una simplificacion del 60% sobre la cuota agregada.
+                                </p>
                             </div>
                         </details>
 

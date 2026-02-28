@@ -100,6 +100,19 @@ class IrpfCalculatorTest extends TestCase
         $this->assertNotSame($result2025->totalTax->cents, $result2026->totalTax->cents);
     }
 
+    public function test_ceuta_melilla_bonus_reduces_total_tax_and_effective_rate_for_same_input(): void
+    {
+        $calculator = $this->makeCalculator();
+
+        $withoutBonus = $calculator->calculate($this->makeInput(30000, 1, 2026, false));
+        $withBonus = $calculator->calculate($this->makeInput(30000, 1, 2026, true));
+
+        $this->assertLessThan($withoutBonus->totalTax->cents, $withBonus->totalTax->cents);
+        $this->assertGreaterThan(0, $withBonus->breakdown->ceutaMelillaDeduction->cents);
+        $this->assertLessThan($withoutBonus->effectiveRate, $withBonus->effectiveRate);
+        $this->assertSame($withoutBonus->breakdown->grossTax->cents, $withBonus->breakdown->grossTax->cents);
+    }
+
     private function makeCalculator(): IrpfCalculator
     {
         return new IrpfCalculator(
@@ -107,13 +120,14 @@ class IrpfCalculatorTest extends TestCase
         );
     }
 
-    private function makeInput(int $grossIncomeEuros, int $children = 0, int $year = 2026): TaxInput
+    private function makeInput(int $grossIncomeEuros, int $children = 0, int $year = 2026, bool $ceutaMelilla = false): TaxInput
     {
         return new TaxInput(
             grossIncome: new Money($grossIncomeEuros * 100),
             year: new Year($year),
             region: Region::Asturias,
             children: $children,
+            ceutaMelilla: $ceutaMelilla,
         );
     }
 

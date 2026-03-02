@@ -48,7 +48,7 @@ class LegalPagesTest extends TestCase
 
         $response
             ->assertOk()
-            ->assertSee('Esta calculadora ofrece un cálculo aproximado del IRPF', false)
+            ->assertSee('Esta calculadora ofrece una estimación del IRPF', false)
             ->assertSee('ad-slot', false);
     }
 }

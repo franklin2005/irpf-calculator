@@ -14,14 +14,14 @@
 
     $fallbackTitle = match ($routeName) {
         'home' => 'Calculadora de IRPF en España por año y comunidad autónoma',
-        'irpf.calculator' => 'Calculadora IRPF '.($routeYear ?? 2026).' por comunidades autónomas',
+        'irpf.calculator' => 'Calculadora de IRPF '.($routeYear ?? 2026).' por comunidad autónoma',
         default => 'Calculadora de IRPF en España',
     };
 
     $fallbackMetaDescription = match ($routeName) {
         'home' => 'Calcula de forma orientativa tu IRPF por año y comunidad autónoma en España (régimen común).',
-        'irpf.calculator' => 'Simula de forma aproximada tu cuota de IRPF por año y comunidad autónoma del régimen común.',
-        default => 'Herramienta informativa para estimar el IRPF en España. Resultado orientativo, no constituye asesoría fiscal.',
+        'irpf.calculator' => 'Consulta una estimación de tu cuota de IRPF por año y comunidad autónoma del régimen común.',
+        default => 'Herramienta informativa para estimar el IRPF en España. El resultado es orientativo y no constituye asesoría fiscal.',
     };
 
     $resolvedTitle = $routeName === 'irpf.calculator'
@@ -81,7 +81,7 @@
                 <div class="flex items-center gap-4 text-sm text-[var(--irpf-muted)]">
                     <a href="{{ route('home', [], false) }}" wire:navigate class="transition hover:text-[var(--irpf-ink)]">Inicio</a>
                     <a href="{{ route('irpf.calculator', ['year' => 2026], false) }}" wire:navigate class="transition hover:text-[var(--irpf-ink)]">Calculadora 2026</a>
-                    <a href="{{ route('irpf.region.show', ['year' => 2026, 'regionSlug' => 'asturias'], false) }}" wire:navigate class="transition hover:text-[var(--irpf-ink)]">Información CCAA</a>
+                    <a href="{{ route('irpf.region.show', ['year' => 2026, 'regionSlug' => 'asturias'], false) }}" wire:navigate class="transition hover:text-[var(--irpf-ink)]">Información por CCAA</a>
                 </div>
             </nav>
         </header>

@@ -113,6 +113,22 @@ class IrpfCalculatorTest extends TestCase
         $this->assertSame($withoutBonus->breakdown->grossTax->cents, $withBonus->breakdown->grossTax->cents);
     }
 
+    public function test_ascendientes_minimum_reduces_total_tax_and_effective_rate_for_same_input(): void
+    {
+        $calculator = $this->makeCalculator();
+
+        $withoutAscendientes = $calculator->calculate($this->makeInput(30000, 0, 2026));
+        $withAscendientes = $calculator->calculate($this->makeInput(30000, 0, 2026, false, 2, 1));
+
+        $this->assertGreaterThan(
+            $withoutAscendientes->breakdown->ascendientesMinimum->cents,
+            $withAscendientes->breakdown->ascendientesMinimum->cents,
+        );
+        $this->assertLessThan($withoutAscendientes->totalTax->cents, $withAscendientes->totalTax->cents);
+        $this->assertLessThan($withoutAscendientes->effectiveRate, $withAscendientes->effectiveRate);
+        $this->assertGreaterThan(0, $withAscendientes->breakdown->ascendientesMinimum->cents);
+    }
+
     private function makeCalculator(): IrpfCalculator
     {
         return new IrpfCalculator(
@@ -120,14 +136,22 @@ class IrpfCalculatorTest extends TestCase
         );
     }
 
-    private function makeInput(int $grossIncomeEuros, int $children = 0, int $year = 2026, bool $ceutaMelilla = false): TaxInput
-    {
+    private function makeInput(
+        int $grossIncomeEuros,
+        int $children = 0,
+        int $year = 2026,
+        bool $ceutaMelilla = false,
+        int $ascendientesMayores65 = 0,
+        int $ascendientesMayores75 = 0,
+    ): TaxInput {
         return new TaxInput(
             grossIncome: new Money($grossIncomeEuros * 100),
             year: new Year($year),
             region: Region::Asturias,
             children: $children,
             ceutaMelilla: $ceutaMelilla,
+            ascendientesMayores65: $ascendientesMayores65,
+            ascendientesMayores75: $ascendientesMayores75,
         );
     }
 

@@ -41,6 +41,10 @@ class IrpfCalculatorPage extends Component
     #[Url(except: 0)]
     public int $children = 0;
 
+    public int $ascendientesMayores65 = 0;
+
+    public int $ascendientesMayores75 = 0;
+
     public bool $ceutaMelilla = false;
 
     public ?TaxResult $result = null;
@@ -90,6 +94,13 @@ class IrpfCalculatorPage extends Component
             'children.required' => 'Debes indicar el número de hijos.',
             'children.integer' => 'El número de hijos debe ser un entero.',
             'children.min' => 'El número de hijos no puede ser negativo.',
+            'ascendientesMayores65.required' => 'Debes indicar los ascendientes mayores de 65 años a cargo.',
+            'ascendientesMayores65.integer' => 'El número de ascendientes mayores de 65 años debe ser un entero.',
+            'ascendientesMayores65.min' => 'Los ascendientes mayores de 65 años no pueden ser negativos.',
+            'ascendientesMayores75.required' => 'Debes indicar los ascendientes mayores de 75 años a cargo.',
+            'ascendientesMayores75.integer' => 'El número de ascendientes mayores de 75 años debe ser un entero.',
+            'ascendientesMayores75.min' => 'Los ascendientes mayores de 75 años no pueden ser negativos.',
+            'ascendientesMayores75.lte' => 'Los ascendientes mayores de 75 años no pueden superar a los mayores de 65 años.',
             'year.required' => 'Debes seleccionar un año fiscal.',
             'year.in' => 'El año fiscal seleccionado no es válido.',
             'regionSlug.required' => 'Debes seleccionar una comunidad autónoma.',
@@ -115,11 +126,14 @@ class IrpfCalculatorPage extends Component
                 region: $region,
                 children: $validated['children'],
                 ceutaMelilla: $applyCeutaMelillaBonus,
+                ascendientesMayores65: $validated['ascendientesMayores65'],
+                ascendientesMayores75: $validated['ascendientesMayores75'],
             );
 
             $this->result = $this->calculateIrpfUseCase->execute($input);
             $this->resultData = $this->mapResultForView($this->result);
-            $this->dispatch('irpf-calculated',
+            $this->dispatch(
+                'irpf-calculated',
                 year: $this->year,
                 regionSlug: $validated['regionSlug'],
                 grossIncome: $validated['grossIncome'],
@@ -195,6 +209,7 @@ class IrpfCalculatorPage extends Component
             'effective_rate_percent' => $result->effectiveRate * 100,
             'personal_minimum_eur' => $result->breakdown->personalMinimum->cents / 100,
             'family_minimum_eur' => $result->breakdown->familyMinimum->cents / 100,
+            'ascendientes_minimum' => $result->breakdown->ascendientesMinimum->cents / 100,
             'state_tax_eur' => $result->breakdown->stateTax->cents / 100,
             'regional_tax_eur' => $result->breakdown->regionalTax->cents / 100,
             'gross_tax_eur' => $result->breakdown->grossTax->cents / 100,
@@ -212,6 +227,8 @@ class IrpfCalculatorPage extends Component
         return [
             'grossIncome' => ['required', 'integer', 'min:1'],
             'children' => ['required', 'integer', 'min:0'],
+            'ascendientesMayores65' => ['required', 'integer', 'min:0'],
+            'ascendientesMayores75' => ['required', 'integer', 'min:0', 'lte:ascendientesMayores65'],
             'year' => ['required', Rule::in(self::SUPPORTED_YEARS)],
             'regionSlug' => ['required', Rule::in(array_keys($this->regionOptions))],
         ];
@@ -251,7 +268,7 @@ class IrpfCalculatorPage extends Component
 
     private function unsupportedForalRegionMessage(): string
     {
-        return "Navarra y País Vasco aplican un sistema fiscal propio (régimen foral), con reglas distintas a las del IRPF estatal + autonómico.\n\nPor eso, esta calculadora —basada en el régimen común— no puede generar un resultado válido para estas comunidades.\n\nEstamos desarrollando una versión compatible con el régimen foral.";
+        return "Navarra y País Vasco aplican un sistema fiscal propio (régimen foral), con reglas distintas a las del IRPF estatal y autonómico.\n\nPor eso, esta calculadora basada en el régimen común no puede generar un resultado válido para estas comunidades.\n\nEstamos trabajando en una versión compatible con el régimen foral.";
     }
 
     /**
@@ -265,7 +282,7 @@ class IrpfCalculatorPage extends Component
             $options[$region->value] = $this->labelForRegion($region);
         }
 
-        $options[self::CEUTA_MELILLA_SLUG] = 'Ceuta y Melilla (bonificación 60%)';
+        $options[self::CEUTA_MELILLA_SLUG] = 'Ceuta y Melilla (bonificación 60 %)';
 
         return $options;
     }
@@ -278,15 +295,15 @@ class IrpfCalculatorPage extends Component
     private function labelForRegion(Region $region): string
     {
         return match ($region) {
-            Region::Andalucia => "Andaluc\u{00ED}a",
-            Region::Aragon => "Arag\u{00F3}n",
+            Region::Andalucia => 'Andalucía',
+            Region::Aragon => 'Aragón',
             Region::Asturias => 'Asturias',
             Region::Baleares => 'Baleares',
             Region::Canarias => 'Canarias',
             Region::Cantabria => 'Cantabria',
             Region::CastillaLaMancha => 'Castilla-La Mancha',
-            Region::CastillaYLeon => "Castilla y Le\u{00F3}n",
-            Region::Cataluna => "Catalu\u{00F1}a",
+            Region::CastillaYLeon => 'Castilla y León',
+            Region::Cataluna => 'Cataluña',
             Region::ComunidadValenciana => 'Comunidad Valenciana',
             Region::Extremadura => 'Extremadura',
             Region::Galicia => 'Galicia',
@@ -294,7 +311,7 @@ class IrpfCalculatorPage extends Component
             Region::Madrid => 'Madrid',
             Region::Murcia => 'Murcia',
             Region::Navarra => 'Navarra',
-            Region::PaisVasco => "Pa\u{00ED}s Vasco",
+            Region::PaisVasco => 'País Vasco',
         };
     }
 }

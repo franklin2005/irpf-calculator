@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>IRPF UI Lab</title>
+        <title>Escenario interactivo de IRPF</title>
 
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -63,10 +63,10 @@
             <header class="panel rounded-3xl p-5 md:p-7">
                 <div class="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
                     <div class="space-y-3">
-                        <p class="text-xs font-semibold uppercase tracking-[0.22em] text-teal-700">IRPF Experience Layer</p>
-                        <h1 class="display-title text-6xl leading-none text-zinc-900 md:text-8xl">Tax Studio</h1>
+                        <p class="text-xs font-semibold uppercase tracking-[0.22em] text-teal-700">IRPF España</p>
+                        <h1 class="display-title text-6xl leading-none text-zinc-900 md:text-8xl">Escenario interactivo</h1>
                         <p class="max-w-2xl text-sm text-zinc-700 md:text-base">
-                            Interfaz experimental para visualizar tu escenario fiscal con feedback inmediato, pensada para una experiencia clara y rapida.
+                            Ajusta ingresos y situación familiar para visualizar de forma inmediata una estimación orientativa.
                         </p>
                     </div>
 
@@ -83,7 +83,7 @@
                             wire:navigate
                             class="nav-link rounded-full border border-zinc-500/40 px-4 py-2 text-sm font-semibold text-zinc-800 transition hover:border-teal-700 hover:text-teal-800"
                         >
-                            UI Lab
+                            Escenario
                         </a>
                     </nav>
                 </div>
@@ -92,13 +92,13 @@
             <main class="mt-6 grid gap-6 lg:grid-cols-[1.35fr_0.95fr]">
                 <section class="panel rounded-3xl p-5 md:p-7">
                     <div class="mb-5 flex items-center justify-between">
-                        <h2 class="display-title text-4xl text-zinc-900 md:text-5xl">Scenario Inputs</h2>
-                        <span class="rounded-full border border-zinc-500/35 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-zinc-700">Live preview</span>
+                        <h2 class="display-title text-4xl text-zinc-900 md:text-5xl">Datos del escenario</h2>
+                        <span class="rounded-full border border-zinc-500/35 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-zinc-700">Vista previa</span>
                     </div>
 
                     <div class="grid gap-4 md:grid-cols-2">
                         <label class="space-y-2">
-                            <span class="text-xs font-semibold uppercase tracking-[0.16em] text-zinc-700">Gross annual income</span>
+                            <span class="text-xs font-semibold uppercase tracking-[0.16em] text-zinc-700">Ingresos brutos anuales</span>
                             <input
                                 type="range"
                                 min="12000"
@@ -118,7 +118,7 @@
                         </label>
 
                         <label class="space-y-2">
-                            <span class="text-xs font-semibold uppercase tracking-[0.16em] text-zinc-700">Variable extras</span>
+                            <span class="text-xs font-semibold uppercase tracking-[0.16em] text-zinc-700">Ingresos variables</span>
                             <input
                                 type="range"
                                 min="0"
@@ -138,7 +138,7 @@
                         </label>
 
                         <label class="space-y-2">
-                            <span class="text-xs font-semibold uppercase tracking-[0.16em] text-zinc-700">Children</span>
+                            <span class="text-xs font-semibold uppercase tracking-[0.16em] text-zinc-700">Número de hijos</span>
                             <select
                                 x-model.number="children"
                                 class="w-full rounded-2xl border border-zinc-500/35 bg-white/80 px-3 py-2 text-sm font-semibold outline-none transition focus:border-teal-700"
@@ -146,12 +146,12 @@
                                 <option value="0">0</option>
                                 <option value="1">1</option>
                                 <option value="2">2</option>
-                                <option value="3">3+</option>
+                                <option value="3">3 o más</option>
                             </select>
                         </label>
 
                         <label class="space-y-2">
-                            <span class="text-xs font-semibold uppercase tracking-[0.16em] text-zinc-700">Current withholding %</span>
+                            <span class="text-xs font-semibold uppercase tracking-[0.16em] text-zinc-700">Retención actual (%)</span>
                             <input
                                 type="range"
                                 min="5"
@@ -169,22 +169,22 @@
 
                 <aside class="space-y-6">
                     <section class="panel rounded-3xl p-5 md:p-6">
-                        <h3 class="display-title text-3xl text-zinc-900">Quick Reading</h3>
+                        <h3 class="display-title text-3xl text-zinc-900">Resumen rápido</h3>
                         <div class="mt-4 grid gap-3">
                             <article class="metric-tile rounded-2xl p-4">
-                                <p class="text-xs font-semibold uppercase tracking-[0.14em] text-zinc-600">Estimated taxable base</p>
+                                <p class="text-xs font-semibold uppercase tracking-[0.14em] text-zinc-600">Base imponible estimada</p>
                                 <p class="mt-2 text-2xl font-bold text-zinc-900">
                                     <span x-text="new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(Math.max(gross + extras - (children * 1800), 0))"></span>
                                 </p>
                             </article>
                             <article class="metric-tile rounded-2xl p-4">
-                                <p class="text-xs font-semibold uppercase tracking-[0.14em] text-zinc-600">Projected annual withholding</p>
+                                <p class="text-xs font-semibold uppercase tracking-[0.14em] text-zinc-600">Retención anual estimada</p>
                                 <p class="mt-2 text-2xl font-bold text-teal-800">
                                     <span x-text="new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(((gross + extras) * (withholding / 100)))"></span>
                                 </p>
                             </article>
                             <article class="metric-tile rounded-2xl p-4">
-                                <p class="text-xs font-semibold uppercase tracking-[0.14em] text-zinc-600">Net before final settlement</p>
+                                <p class="text-xs font-semibold uppercase tracking-[0.14em] text-zinc-600">Neto previo a regularización</p>
                                 <p class="mt-2 text-2xl font-bold text-amber-700">
                                     <span x-text="new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format((gross + extras) - ((gross + extras) * (withholding / 100)))"></span>
                                 </p>
@@ -193,22 +193,22 @@
                     </section>
 
                     <section class="panel rounded-3xl p-5 md:p-6">
-                        <h3 class="display-title text-3xl text-zinc-900">Actions</h3>
-                        <p class="mt-2 text-sm text-zinc-700">Esta vista esta preparada para navegar con Livewire sin recarga completa.</p>
+                        <h3 class="display-title text-3xl text-zinc-900">Acciones</h3>
+                        <p class="mt-2 text-sm text-zinc-700">Puedes ajustar los datos y revisar al instante cómo cambia la estimación.</p>
                         <div class="mt-4 flex flex-wrap gap-2">
                             <a
                                 href="/ui"
                                 wire:navigate
                                 class="rounded-full border border-teal-700 bg-teal-700 px-4 py-2 text-sm font-semibold text-white transition hover:bg-teal-800"
                             >
-                                Reload lab
+                                Actualizar escenario
                             </a>
                             <a
                                 href="/"
                                 wire:navigate
                                 class="rounded-full border border-zinc-700/35 px-4 py-2 text-sm font-semibold text-zinc-800 transition hover:border-zinc-900"
                             >
-                                Back to welcome
+                                Volver al inicio
                             </a>
                         </div>
                     </section>

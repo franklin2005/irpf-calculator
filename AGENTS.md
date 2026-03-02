@@ -23,10 +23,11 @@ This application is a Laravel application and its main Laravel ecosystems packag
 
 ## Skills Activation
 
-This project has domain-specific skills available. You MUST activate the relevant skill whenever you work in that domain—don't wait until you're stuck.
+This project has domain-specific skills available. You MUST activate the relevant skill whenever you work in that domain - don't wait until you're stuck.
 
-- `fluxui-development` — Develops UIs with Flux UI Free components. Activates when creating buttons, forms, modals, inputs, dropdowns, checkboxes, or UI components; replacing HTML form elements with Flux; working with flux: components; or when the user mentions Flux, component library, UI components, form fields, or asks about available Flux components.
-- `livewire-development` — Develops reactive Livewire 4 components. Activates when creating, updating, or modifying Livewire components; working with wire:model, wire:click, wire:loading, or any wire: directives; adding real-time updates, loading states, or reactivity; debugging component behavior; writing Livewire tests; or when the user mentions Livewire, component, counter, or reactive UI.
+- fluxui-development: Develops UIs with Flux UI Free components. Activate when working with Flux components and form/UI composition.
+- livewire-development: Develops reactive Livewire 4 components. Activate when modifying Livewire components or wire directives.
+- spanish-proofread-and-copywriter: Proofreads and rewrites visible Spanish copy for clarity, grammar, and consistency without changing application logic.
 
 ## Conventions
 
@@ -224,7 +225,7 @@ protected function isAccessible(User $user, ?string $path = null): bool
 
 # Livewire
 
-- Livewire allows you to build dynamic, reactive interfaces using only PHP — no JavaScript required.
+- Livewire allows you to build dynamic, reactive interfaces using only PHP â€” no JavaScript required.
 - Instead of writing frontend code in JavaScript frameworks, you use Alpine.js to build the UI when client-side interactions are required.
 - State lives on the server; the UI reflects it. Validate and authorize in actions (they're like HTTP requests).
 - IMPORTANT: Activate `livewire-development` every time you're working with Livewire-related tasks.

@@ -13,7 +13,7 @@ class ExampleTest extends TestCase
 
         $response
             ->assertOk()
-            ->assertSee('Calculadora IRPF 2025 y 2026 por comunidades autónomas')
-            ->assertSee('Calcular IRPF 2026');
+            ->assertSee('Calculadora de IRPF 2025 y 2026 por comunidad autónoma')
+            ->assertSee('Calcular IRPF');
     }
 }

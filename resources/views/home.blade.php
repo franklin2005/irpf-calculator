@@ -32,14 +32,14 @@
             <section class="irpf-panel rounded-3xl px-6 py-10 text-center md:px-10">
                 <p class="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--irpf-teal)]">IRPF España</p>
                 <h1 class="irpf-display mt-3 text-5xl leading-none text-[var(--irpf-ink)] md:text-7xl">
-                    Calculadora IRPF 2025 y 2026 por comunidades autónomas
+                    Calculadora de IRPF 2025 y 2026 por comunidad autónoma
                 </h1>
                 <p class="mx-auto mt-4 max-w-3xl text-sm font-medium text-[var(--irpf-muted)] md:text-base">
-                    Simula de forma aproximada tu cuota de IRPF según tus ingresos, año fiscal y comunidad autónoma
+                    Obtén una estimación orientativa de tu cuota de IRPF según tus ingresos, el año fiscal y la comunidad autónoma
                     del régimen común en España.
                 </p>
                 <div class="mt-7 flex flex-wrap items-center justify-center gap-3">
-                    <flux:button :href="route('irpf.calculator', ['year' => 2026], false)" variant="primary" aria-label="Ir a la calculadora IRPF 2026" wire:navigate>
+                    <flux:button :href="route('irpf.calculator', ['year' => 2026], false)" variant="primary" aria-label="Ir a la calculadora de IRPF 2026" wire:navigate>
                         Calcular IRPF
                     </flux:button>
 
@@ -96,7 +96,7 @@
             <section class="ad-slot irpf-soft-card mt-6 min-h-28 rounded-3xl p-5" aria-label="Espacio para anuncios">
                 <p class="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--irpf-muted)]">Espacio para anuncios</p>
                 <p class="mt-2 text-sm text-[var(--irpf-muted)]">
-                    Bloque reservado para futuras integraciones de publicidad, manteniendo estabilidad visual de la página.
+                    Bloque reservado para futuras integraciones publicitarias, manteniendo la estabilidad visual de la página.
                 </p>
             </section>
 
@@ -113,11 +113,11 @@
                 </article>
 
                 <article class="irpf-soft-card rounded-3xl p-5">
-                    <h2 class="text-lg font-semibold text-[var(--irpf-ink)]">Qué no incluye por ahora</h2>
+                    <h2 class="text-lg font-semibold text-[var(--irpf-ink)]">Qué no incluye esta herramienta</h2>
                     <ul class="mt-3 space-y-2 text-sm text-[var(--irpf-ink)]">
                         <li>No sustituye asesoramiento fiscal profesional.</li>
                         <li>No contempla todos los supuestos personales complejos.</li>
-                        <li>No incluye todas las deducciones y ajustes avanzados.</li>
+                        <li>No incorpora todas las deducciones y ajustes avanzados.</li>
                         <li>No equivale a una liquidación oficial de la Agencia Tributaria.</li>
                     </ul>
                 </article>

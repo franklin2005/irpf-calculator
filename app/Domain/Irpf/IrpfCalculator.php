@@ -16,7 +16,10 @@ final class IrpfCalculator
      * - Taxable base equals gross annual income.
      * - Personal minimum uses personal_minimums.base from table.
      * - Family minimum uses family_minimums.per_child multiplied by TaxInput children.
-     * - Net taxable base is max(0, taxable base - personal minimum - family minimum).
+     * - Ascendientes minimum uses:
+     *   - 1,150 EUR per ascendiente mayor de 65.
+     *   - additional 1,400 EUR per ascendiente mayor de 75.
+     * - Net taxable base is max(0, taxable base - personal minimum - family minimum - ascendientes minimum).
      */
     public function calculate(TaxInput $input): TaxResult
     {
@@ -25,8 +28,11 @@ final class IrpfCalculator
         $taxableBase = $input->grossIncome;
         $personalMinimum = new Money($this->toCents($this->extractInt($table['personal_minimums'] ?? [], 'base')));
         $familyMinimum = new Money($this->toCents($this->extractInt($table['family_minimums'] ?? [], 'per_child') * $input->children));
+        $ascendientesMinimum = new Money(
+            ($input->ascendientesMayores65 * 1150_00) + ($input->ascendientesMayores75 * 1400_00),
+        );
 
-        $netTaxableBaseCents = max(0, $taxableBase->cents - $personalMinimum->cents - $familyMinimum->cents);
+        $netTaxableBaseCents = max(0, $taxableBase->cents - $personalMinimum->cents - $familyMinimum->cents - $ascendientesMinimum->cents);
         $netTaxableBase = new Money($netTaxableBaseCents);
 
         $stateCalculation = $this->calculateProgressiveTax($netTaxableBaseCents, $table['state_brackets'] ?? []);
@@ -50,6 +56,7 @@ final class IrpfCalculator
                 taxableBase: $taxableBase,
                 personalMinimum: $personalMinimum,
                 familyMinimum: $familyMinimum,
+                ascendientesMinimum: $ascendientesMinimum,
                 netTaxableBase: $netTaxableBase,
                 stateTax: $stateTax,
                 regionalTax: $regionalTax,

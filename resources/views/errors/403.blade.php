@@ -1,5 +1,5 @@
 <x-layouts.app
-    title="Acceso denegado - Calculadora IRPF Espa&ntilde;a"
+    title="Acceso denegado - Calculadora de IRPF España"
     meta-description="No tienes permisos para acceder a este recurso."
     :canonical="url()->current()"
 >
@@ -8,7 +8,7 @@
             <p class="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--irpf-teal)]">Error 403</p>
             <h1 class="irpf-display mt-3 text-5xl text-[var(--irpf-ink)] md:text-6xl">Acceso denegado</h1>
             <p class="mt-4 text-sm text-[var(--irpf-muted)] md:text-base">
-                No tienes permisos para ver esta p&aacute;gina.
+                No tienes permisos para ver esta página.
             </p>
 
             <div class="mt-6 flex justify-center">

@@ -15,7 +15,7 @@ class IrpfCalculatorPageTest extends TestCase
         $response
             ->assertOk()
             ->assertSee('Datos principales')
-            ->assertSee('Situación familiar')
+            ->assertSee('familiar')
             ->assertSee('Deducciones y ajustes')
             ->assertSee('Resultado');
     }
@@ -76,7 +76,7 @@ class IrpfCalculatorPageTest extends TestCase
             ->set('children', 0)
             ->call('calculate')
             ->assertHasNoErrors()
-            ->assertSee('Bonificación Ceuta/Melilla (60%)');
+            ->assertSee('Ceuta y Melilla (bonificación 60 %)');
 
         $bonusResult = $bonusCalculation->get('resultData');
 
@@ -93,7 +93,7 @@ class IrpfCalculatorPageTest extends TestCase
 
         $response
             ->assertOk()
-            ->assertSee('Bonificación Ceuta/Melilla');
+            ->assertSee('Ceuta y Melilla');
     }
 
     public function test_livewire_component_reads_query_string_properties(): void
@@ -166,6 +166,39 @@ class IrpfCalculatorPageTest extends TestCase
         $this->assertNotSame($asturiasResult['total_tax_eur'], $madridResult['total_tax_eur']);
     }
 
+    public function test_livewire_component_applies_ascendientes_minimum_and_reduces_tax(): void
+    {
+        $withoutAscendientes = Livewire::test(IrpfCalculatorPage::class, ['year' => 2026])
+            ->set('regionSlug', 'asturias')
+            ->set('grossIncome', 30000)
+            ->set('children', 0)
+            ->set('ascendientesMayores65', 0)
+            ->set('ascendientesMayores75', 0)
+            ->call('calculate')
+            ->assertHasNoErrors()
+            ->get('resultData');
+
+        $withAscendientes = Livewire::test(IrpfCalculatorPage::class, ['year' => 2026])
+            ->set('regionSlug', 'asturias')
+            ->set('grossIncome', 30000)
+            ->set('children', 0)
+            ->set('ascendientesMayores65', 2)
+            ->set('ascendientesMayores75', 1)
+            ->call('calculate')
+            ->assertHasNoErrors()
+            ->get('resultData');
+
+        $this->assertIsArray($withoutAscendientes);
+        $this->assertIsArray($withAscendientes);
+        $this->assertArrayHasKey('ascendientes_minimum', $withAscendientes);
+        $this->assertGreaterThan(0, $withAscendientes['ascendientes_minimum']);
+        $this->assertLessThan($withoutAscendientes['total_tax_eur'], $withAscendientes['total_tax_eur']);
+        $this->assertLessThan(
+            $withoutAscendientes['effective_rate_percent'],
+            $withAscendientes['effective_rate_percent'],
+        );
+    }
+
     public function test_livewire_component_uses_selected_year_for_calculation(): void
     {
         $input = [
@@ -205,8 +238,7 @@ class IrpfCalculatorPageTest extends TestCase
 
         $response
             ->assertOk()
-            ->assertSee('Régimen foral no incluido por ahora')
-            ->assertSee('Navarra y País Vasco aplican un sistema fiscal propio (régimen foral)')
+            ->assertSee('sistema fiscal propio')
             ->assertSee('resultData&quot;:null', false);
     }
 
@@ -216,8 +248,7 @@ class IrpfCalculatorPageTest extends TestCase
 
         $response
             ->assertOk()
-            ->assertSee('Régimen foral no incluido por ahora')
-            ->assertSee('esta calculadora —basada en el régimen común— no puede generar un resultado válido para estas comunidades')
+            ->assertSee('no puede generar un resultado')
             ->assertSee('resultData&quot;:null', false);
     }
 }

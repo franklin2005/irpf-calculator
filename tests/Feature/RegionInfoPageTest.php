@@ -37,13 +37,13 @@ class RegionInfoPageTest extends TestCase
 
         $response
             ->assertOk()
-            ->assertSee('<title>IRPF 2026 en Asturias: tramos, tipos y ejemplo de cálculo</title>', false)
-            ->assertSee('<meta name="description" content="Consulta los tramos de IRPF 2026 en Asturias, mínimos personales y familiares, y un ejemplo de cálculo aproximado con nuestra calculadora.">', false)
+            ->assertSee('<title>IRPF 2026 en Asturias: tramos y ejemplo orientativo</title>', false)
+            ->assertSee('<meta name="description" content="Consulta los tramos de IRPF 2026 en Asturias, junto con ejemplos orientativos de cálculo y acceso directo a la calculadora.">', false)
             ->assertSee('<link rel="canonical" href="'.$url.'">', false)
             ->assertSee('IRPF 2026 en Asturias')
             ->assertSee('Tramos estatales')
-            ->assertSee('12.450 EUR')
-            ->assertSee('Ejemplos de cálculo');
+            ->assertSee('12.450 €')
+            ->assertSee('Ejemplos orientativos de cálculo');
     }
 
     public function test_region_info_page_renders_sections_for_2025_madrid(): void
@@ -57,8 +57,8 @@ class RegionInfoPageTest extends TestCase
             ->assertOk()
             ->assertSee('IRPF 2025 en Madrid')
             ->assertSee('Tramos estatales')
-            ->assertSee('EUR')
-            ->assertSee('Ejemplos de cálculo')
-            ->assertSee('15.000 EUR brutos');
+            ->assertSee('€')
+            ->assertSee('Ejemplos orientativos de cálculo')
+            ->assertSee('15.000 € brutos');
     }
 }

@@ -26,6 +26,7 @@ final readonly class TaxBreakdown
         public Money $taxableBase,
         public Money $personalMinimum,
         public Money $familyMinimum,
+        public Money $ascendientesMinimum,
         public Money $netTaxableBase,
         public Money $stateTax,
         public Money $regionalTax,

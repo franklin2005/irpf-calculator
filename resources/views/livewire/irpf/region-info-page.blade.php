@@ -104,7 +104,7 @@
         <section class="irpf-panel rounded-3xl p-5 md:p-7">
             <h2 class="irpf-display text-4xl text-[var(--irpf-ink)] md:text-5xl">Resumen y acceso a la calculadora</h2>
             <p class="mt-3 text-sm text-[var(--irpf-muted)]">
-                También puedes ir directamente a la calculadora con el año y la comunidad autónoma ya seleccionados.
+                También puedes acceder directamente a la calculadora con el año y la comunidad autónoma ya seleccionados.
             </p>
 
             <a
@@ -112,12 +112,12 @@
                 wire:navigate
                 class="mt-5 inline-flex items-center rounded-xl border border-[var(--irpf-line)] bg-[var(--irpf-panel)] px-4 py-2 text-sm font-semibold text-[var(--irpf-ink)] transition hover:border-[var(--irpf-teal)] hover:text-[var(--irpf-teal)]"
             >
-                Ir a la calculadora IRPF de {{ $regionName }} ({{ $year }})
+                Ir a la calculadora de IRPF de {{ $regionName }} ({{ $year }})
             </a>
         </section>
 
         <section class="irpf-panel rounded-3xl p-5 md:p-7">
-            <h2 class="irpf-display text-4xl text-[var(--irpf-ink)] md:text-5xl">Tramos IRPF {{ $year }} en {{ $regionName }}</h2>
+            <h2 class="irpf-display text-4xl text-[var(--irpf-ink)] md:text-5xl">Tramos de IRPF {{ $year }} en {{ $regionName }}</h2>
             <p class="mt-3 text-sm text-[var(--irpf-muted)]">
                 Visualización de tramos cargados para esta comunidad autónoma y año fiscal.
             </p>
@@ -137,13 +137,13 @@
                             <tbody>
                                 @forelse ($stateBrackets as $index => $bracket)
                                     <tr wire:key="state-bracket-{{ $index }}" class="border-t border-[var(--irpf-line)]/50">
-                                        <td class="px-2 py-2">{{ number_format($bracket['from'], 0, ',', '.') }} EUR</td>
-                                        <td class="px-2 py-2">{{ $bracket['to'] === null ? 'En adelante' : number_format($bracket['to'], 0, ',', '.').' EUR' }}</td>
+                                        <td class="px-2 py-2">{{ number_format($bracket['from'], 0, ',', '.') }} €</td>
+                                        <td class="px-2 py-2">{{ $bracket['to'] === null ? 'En adelante' : number_format($bracket['to'], 0, ',', '.').' €' }}</td>
                                         <td class="px-2 py-2">{{ number_format($bracket['rate'], 2, ',', '.') }}%</td>
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="3" class="px-2 py-2 text-[var(--irpf-muted)]">Sin tramos disponibles.</td>
+                                        <td colspan="3" class="px-2 py-2 text-[var(--irpf-muted)]">No hay tramos disponibles.</td>
                                     </tr>
                                 @endforelse
                             </tbody>
@@ -165,13 +165,13 @@
                             <tbody>
                                 @forelse ($regionalBrackets as $index => $bracket)
                                     <tr wire:key="regional-bracket-{{ $index }}" class="border-t border-[var(--irpf-line)]/50">
-                                        <td class="px-2 py-2">{{ number_format($bracket['from'], 0, ',', '.') }} EUR</td>
-                                        <td class="px-2 py-2">{{ $bracket['to'] === null ? 'En adelante' : number_format($bracket['to'], 0, ',', '.').' EUR' }}</td>
+                                        <td class="px-2 py-2">{{ number_format($bracket['from'], 0, ',', '.') }} €</td>
+                                        <td class="px-2 py-2">{{ $bracket['to'] === null ? 'En adelante' : number_format($bracket['to'], 0, ',', '.').' €' }}</td>
                                         <td class="px-2 py-2">{{ number_format($bracket['rate'], 2, ',', '.') }}%</td>
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="3" class="px-2 py-2 text-[var(--irpf-muted)]">Sin tramos disponibles.</td>
+                                        <td colspan="3" class="px-2 py-2 text-[var(--irpf-muted)]">No hay tramos disponibles.</td>
                                     </tr>
                                 @endforelse
                             </tbody>
@@ -182,7 +182,7 @@
         </section>
 
         <section class="irpf-panel rounded-3xl p-5 md:p-7">
-            <h2 class="irpf-display text-4xl text-[var(--irpf-ink)] md:text-5xl">Ejemplos de cálculo</h2>
+            <h2 class="irpf-display text-4xl text-[var(--irpf-ink)] md:text-5xl">Ejemplos orientativos de cálculo</h2>
             <p class="mt-3 text-sm text-[var(--irpf-muted)]">
                 Simulaciones orientativas para distintos perfiles de ingresos y situación familiar.
             </p>
@@ -193,15 +193,15 @@
                         <h3 class="text-sm font-semibold text-[var(--irpf-ink)]">{{ $exampleResult['label'] }}</h3>
                         <dl class="mt-3 space-y-2 text-sm text-[var(--irpf-muted)]">
                             <div class="flex items-center justify-between gap-2">
-                                <dt>Bruto</dt>
+                                <dt>Ingresos brutos</dt>
                                 <dd class="font-medium text-[var(--irpf-ink)]">{{ $exampleResult['gross_income'] }}</dd>
                             </div>
                             <div class="flex items-center justify-between gap-2">
-                                <dt>Cuota total aprox.</dt>
+                                <dt>Cuota total aproximada</dt>
                                 <dd class="font-medium text-[var(--irpf-ink)]">{{ $exampleResult['total_tax'] }}</dd>
                             </div>
                             <div class="flex items-center justify-between gap-2">
-                                <dt>Tipo efectivo aprox.</dt>
+                                <dt>Tipo efectivo aproximado</dt>
                                 <dd class="font-medium text-[var(--irpf-teal)]">{{ $exampleResult['effective_rate'] }}</dd>
                             </div>
                         </dl>
@@ -213,8 +213,8 @@
         </section>
 
         <section class="ad-slot irpf-soft-card min-h-32 rounded-3xl p-5" aria-label="Espacio para anuncios">
-            <p class="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--irpf-muted)]">Espacio publicitario</p>
-            <p class="mt-2 text-sm text-[var(--irpf-muted)]">Bloque reservado para publicidad y colaboraciones futuras.</p>
+            <p class="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--irpf-muted)]">Espacio para anuncios</p>
+            <p class="mt-2 text-sm text-[var(--irpf-muted)]">Bloque reservado para futuras integraciones publicitarias.</p>
         </section>
     </div>
 </div>

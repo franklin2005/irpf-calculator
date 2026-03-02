@@ -1,6 +1,6 @@
 <x-layouts.app
-    title="Política de privacidad - Calculadora IRPF España"
-    meta-description="Política de privacidad de la calculadora orientativa de IRPF."
+    title="Política de privacidad - Calculadora de IRPF España"
+    meta-description="Política de privacidad de la calculadora orientativa de IRPF para España."
     :canonical="route('legal.privacy')"
 >
     <main class="irpf-app-bg min-h-screen px-4 py-10 md:px-8">
@@ -9,18 +9,18 @@
 
             <section class="mt-6 space-y-3 text-sm text-[var(--irpf-muted)]">
                 <p>
-                    Esta herramienta no requiere registro y no crea cuentas de usuario.
+                    Esta herramienta no requiere registro ni crea cuentas de usuario.
                 </p>
                 <p>
-                    Los datos introducidos en la calculadora se utilizan exclusivamente para realizar el cálculo en el momento.
+                    Los datos introducidos en la calculadora se utilizan únicamente para realizar el cálculo en el momento.
                     No se solicita ni almacena información personal identificativa como nombre, NIF o dirección postal.
                 </p>
                 <p>
                     En futuras versiones podrían incorporarse herramientas de análisis o publicidad.
-                    Si eso ocurre, esta política se actualizará para reflejar el tratamiento correspondiente.
+                    Si esto sucede, esta política se actualizará para reflejar de forma clara el tratamiento correspondiente.
                 </p>
                 <p>
-                    Para consultas sobre privacidad, puedes contactar en: correo electrónico pendiente de definir.
+                    Para cualquier consulta sobre privacidad, puedes contactar en: correo electrónico pendiente de definir.
                 </p>
             </section>
         </article>

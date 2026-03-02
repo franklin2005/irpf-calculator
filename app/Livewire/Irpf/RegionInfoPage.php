@@ -66,8 +66,8 @@ class RegionInfoPage extends Component
         $this->regionSlug = $regionSlug;
         $this->regionOptions = $this->buildRegionOptions();
         $this->regionName = $this->labelForRegion($region);
-        $this->seoTitle = "IRPF {$this->year} en {$this->regionName}: tramos, tipos y ejemplo de cálculo";
-        $this->seoDescription = "Consulta los tramos de IRPF {$this->year} en {$this->regionName}, mínimos personales y familiares, y un ejemplo de cálculo aproximado con nuestra calculadora.";
+        $this->seoTitle = "IRPF {$this->year} en {$this->regionName}: tramos y ejemplo orientativo";
+        $this->seoDescription = "Consulta los tramos de IRPF {$this->year} en {$this->regionName}, junto con ejemplos orientativos de cálculo y acceso directo a la calculadora.";
         $this->exampleResults = [];
 
         $this->loadBrackets($year, $region);
@@ -177,17 +177,17 @@ class RegionInfoPage extends Component
     private function buildExampleLabel(int $grossIncomeEur, int $children): string
     {
         if ($children === 0) {
-            return number_format($grossIncomeEur, 0, ',', '.').' EUR brutos, sin hijos';
+            return number_format($grossIncomeEur, 0, ',', '.').' € brutos, sin hijos';
         }
 
         $childrenLabel = $children === 1 ? '1 hijo' : "{$children} hijos";
 
-        return number_format($grossIncomeEur, 0, ',', '.')." EUR brutos, {$childrenLabel}";
+        return number_format($grossIncomeEur, 0, ',', '.')." € brutos, {$childrenLabel}";
     }
 
     private function formatEuro(int $amountInCents): string
     {
-        return number_format($amountInCents / 100, 2, ',', '.').' EUR';
+        return number_format($amountInCents / 100, 2, ',', '.').' €';
     }
 
     /**
@@ -207,15 +207,15 @@ class RegionInfoPage extends Component
     private function labelForRegion(Region $region): string
     {
         return match ($region) {
-            Region::Andalucia => "Andaluc\u{00ED}a",
-            Region::Aragon => "Arag\u{00F3}n",
+            Region::Andalucia => 'Andalucía',
+            Region::Aragon => 'Aragón',
             Region::Asturias => 'Asturias',
             Region::Baleares => 'Baleares',
             Region::Canarias => 'Canarias',
             Region::Cantabria => 'Cantabria',
             Region::CastillaLaMancha => 'Castilla-La Mancha',
-            Region::CastillaYLeon => "Castilla y Le\u{00F3}n",
-            Region::Cataluna => "Catalu\u{00F1}a",
+            Region::CastillaYLeon => 'Castilla y León',
+            Region::Cataluna => 'Cataluña',
             Region::ComunidadValenciana => 'Comunidad Valenciana',
             Region::Extremadura => 'Extremadura',
             Region::Galicia => 'Galicia',
@@ -223,7 +223,7 @@ class RegionInfoPage extends Component
             Region::Madrid => 'Madrid',
             Region::Murcia => 'Murcia',
             Region::Navarra => 'Navarra',
-            Region::PaisVasco => "Pa\u{00ED}s Vasco",
+            Region::PaisVasco => 'País Vasco',
         };
     }
 }

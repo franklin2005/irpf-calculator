@@ -35,7 +35,7 @@ class SeoTechnicalTest extends TestCase
 
         $response
             ->assertOk()
-            ->assertSee('Calculadora IRPF 2025 y 2026 por comunidades');
+            ->assertSee('Calculadora de IRPF 2025 y 2026 por comunidad autónoma');
     }
 
     public function test_calculator_page_renders_expected_title_and_canonical_without_query(): void
@@ -44,7 +44,7 @@ class SeoTechnicalTest extends TestCase
 
         $response
             ->assertOk()
-            ->assertSee('<title>Calculadora IRPF 2026 por comunidades', false)
+            ->assertSee('<title>Calculadora de IRPF 2026 por comunidad autónoma', false)
             ->assertSee('<link rel="canonical" href="'.url('/calculadora-irpf/2026').'">', false);
     }
 

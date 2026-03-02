@@ -21,7 +21,7 @@ class LegalPagesTest extends TestCase
 
         $response
             ->assertOk()
-            ->assertSee('Politica de privacidad');
+            ->assertSee('Política de privacidad');
     }
 
     public function test_politica_cookies_page_is_accessible(): void
@@ -30,7 +30,7 @@ class LegalPagesTest extends TestCase
 
         $response
             ->assertOk()
-            ->assertSee('Politica de cookies');
+            ->assertSee('Política de cookies');
     }
 
     public function test_home_contains_ad_slot_placeholder(): void
@@ -48,7 +48,7 @@ class LegalPagesTest extends TestCase
 
         $response
             ->assertOk()
-            ->assertSee('Esta calculadora ofrece un calculo aproximado del IRPF', false)
+            ->assertSee('Esta calculadora ofrece un cálculo aproximado del IRPF', false)
             ->assertSee('ad-slot', false);
     }
 }

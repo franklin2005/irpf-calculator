@@ -85,15 +85,15 @@ class IrpfCalculatorPage extends Component
 
         $validated = $this->validate($this->validationRules(), [
             'grossIncome.required' => 'Debes indicar los ingresos brutos anuales.',
-            'grossIncome.integer' => 'Los ingresos deben ser un numero entero en euros.',
+            'grossIncome.integer' => 'Los ingresos deben ser un número entero en euros.',
             'grossIncome.min' => 'Los ingresos deben ser mayores que cero.',
-            'children.required' => 'Debes indicar el numero de hijos.',
-            'children.integer' => 'El numero de hijos debe ser un entero.',
-            'children.min' => 'El numero de hijos no puede ser negativo.',
-            'year.required' => 'Debes seleccionar un ano fiscal.',
-            'year.in' => 'El ano fiscal seleccionado no es valido.',
-            'regionSlug.required' => 'Debes seleccionar una comunidad autonoma.',
-            'regionSlug.in' => 'La comunidad autonoma seleccionada no es valida.',
+            'children.required' => 'Debes indicar el número de hijos.',
+            'children.integer' => 'El número de hijos debe ser un entero.',
+            'children.min' => 'El número de hijos no puede ser negativo.',
+            'year.required' => 'Debes seleccionar un año fiscal.',
+            'year.in' => 'El año fiscal seleccionado no es válido.',
+            'regionSlug.required' => 'Debes seleccionar una comunidad autónoma.',
+            'regionSlug.in' => 'La comunidad autónoma seleccionada no es válida.',
         ]);
 
         try {
@@ -131,7 +131,7 @@ class IrpfCalculatorPage extends Component
         } catch (MissingTaxTableException|InvalidTaxTableSchemaException $exception) {
             $this->result = null;
             $this->resultData = null;
-            $this->domainError = 'No se han podido cargar las tablas IRPF para el calculo solicitado.';
+            $this->domainError = 'No se han podido cargar las tablas de IRPF para el cálculo solicitado.';
             report($exception);
         } catch (ValidationException $exception) {
             throw $exception;
@@ -147,7 +147,7 @@ class IrpfCalculatorPage extends Component
     {
         if (! $this->isValidRegionSlug($slug)) {
             throw ValidationException::withMessages([
-                'regionSlug' => 'La comunidad autonoma seleccionada no es valida.',
+                'regionSlug' => 'La comunidad autónoma seleccionada no es válida.',
             ]);
         }
 
@@ -161,7 +161,7 @@ class IrpfCalculatorPage extends Component
     {
         if (! $this->isValidYear($year)) {
             throw ValidationException::withMessages([
-                'year' => 'El ano fiscal seleccionado no es valido.',
+                'year' => 'El año fiscal seleccionado no es válido.',
             ]);
         }
 
@@ -227,7 +227,7 @@ class IrpfCalculatorPage extends Component
 
         if ($region === null) {
             throw ValidationException::withMessages([
-                'regionSlug' => 'La comunidad autonoma seleccionada no es valida.',
+                'regionSlug' => 'La comunidad autónoma seleccionada no es válida.',
             ]);
         }
 
@@ -265,7 +265,7 @@ class IrpfCalculatorPage extends Component
             $options[$region->value] = $this->labelForRegion($region);
         }
 
-        $options[self::CEUTA_MELILLA_SLUG] = 'Ceuta y Melilla (bonificacion 60%)';
+        $options[self::CEUTA_MELILLA_SLUG] = 'Ceuta y Melilla (bonificación 60%)';
 
         return $options;
     }

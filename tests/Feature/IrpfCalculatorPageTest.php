@@ -15,9 +15,9 @@ class IrpfCalculatorPageTest extends TestCase
         $response
             ->assertOk()
             ->assertSee('Datos principales')
-            ->assertSee('Familia')
-            ->assertSee('Deducciones (MVP)')
-            ->assertSee('Resultado orientativo');
+            ->assertSee('Situación familiar')
+            ->assertSee('Deducciones y ajustes')
+            ->assertSee('Resultado');
     }
 
     public function test_irpf_calculator_page_is_accessible_for_2025(): void
@@ -76,7 +76,7 @@ class IrpfCalculatorPageTest extends TestCase
             ->set('children', 0)
             ->call('calculate')
             ->assertHasNoErrors()
-            ->assertSee('Bonificacion Ceuta/Melilla (60%)');
+            ->assertSee('Bonificación Ceuta/Melilla (60%)');
 
         $bonusResult = $bonusCalculation->get('resultData');
 
@@ -93,7 +93,7 @@ class IrpfCalculatorPageTest extends TestCase
 
         $response
             ->assertOk()
-            ->assertSee('Bonificacion Ceuta/Melilla');
+            ->assertSee('Bonificación Ceuta/Melilla');
     }
 
     public function test_livewire_component_reads_query_string_properties(): void

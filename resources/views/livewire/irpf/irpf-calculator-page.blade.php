@@ -28,27 +28,27 @@
         <header class="irpf-panel rounded-3xl px-5 py-6 md:px-8">
             <div class="flex flex-wrap items-end justify-between gap-4">
                 <div>
-                    <p class="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--irpf-teal)]">MVP Livewire + Flux</p>
-                    <h1 class="irpf-display text-5xl leading-none text-[var(--irpf-ink)] md:text-7xl">Calculadora IRPF</h1>
+                    <p class="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--irpf-teal)]">IRPF España</p>
+                    <h1 class="irpf-display text-5xl leading-none text-[var(--irpf-ink)] md:text-7xl">Calculadora IRPF {{ $year }} por comunidades autónomas</h1>
                     <p class="mt-2 max-w-2xl text-sm text-[var(--irpf-muted)] md:text-base">
-                        Simulacion inicial para {{ $year }} en {{ $regionOptions[$regionSlug] ?? 'CCAA no valida' }}, conectada al motor de dominio.
+                        Simula de forma orientativa tu cuota de IRPF para {{ $year }} en {{ $regionOptions[$regionSlug] ?? 'una comunidad no válida' }}.
                     </p>
                 </div>
-                <flux:badge color="cyan" size="sm">EPIC 5 UI MVP</flux:badge>
+                <flux:badge color="cyan" size="sm">Régimen común</flux:badge>
             </div>
         </header>
 
         <main class="grid gap-6 lg:grid-cols-[1fr_1.15fr]">
             <section class="irpf-panel rounded-3xl p-5 md:p-7">
                 <flux:heading size="xl" class="irpf-display text-4xl text-[var(--irpf-ink)] md:text-5xl">Introduce tus datos</flux:heading>
-                <flux:text class="mt-2 text-sm text-[var(--irpf-muted)]">Rellena los datos base para obtener una estimacion.</flux:text>
+                <flux:text class="mt-2 text-sm text-[var(--irpf-muted)]">Completa estos campos para obtener un cálculo aproximado.</flux:text>
 
                 <form wire:submit="calculate" class="mt-5 space-y-4">
                     <article class="irpf-soft-card rounded-2xl p-4">
                         <flux:heading size="sm">Datos principales</flux:heading>
                         <div class="mt-3 space-y-3">
                             <flux:field>
-                                <flux:label>Ano fiscal</flux:label>
+                                <flux:label>Año fiscal</flux:label>
                                 <div
                                     x-data="{ open: false }"
                                     class="irpf-region-dropdown relative w-full"
@@ -90,7 +90,7 @@
                             </flux:field>
 
                             <flux:field>
-                                <flux:label>Comunidad autonoma</flux:label>
+                                <flux:label>Comunidad autónoma</flux:label>
                                 <div
                                     x-data="{ open: false }"
                                     class="irpf-region-dropdown relative w-full"
@@ -130,49 +130,49 @@
                                 </div>
                                 <flux:error name="regionSlug" />
                                 <p class="mt-1 text-xs text-[var(--irpf-muted)]">
-                                    Navarra y Pais Vasco tienen regimen fiscal propio; los calculos aqui son solo para regimen comun.
+                                    Navarra y País Vasco tienen régimen fiscal propio; los cálculos aquí son solo para régimen común.
                                 </p>
                             </flux:field>
 
                             <flux:field>
                                 <flux:label>Ingresos brutos anuales (EUR)</flux:label>
-                                <flux:input type="number" min="1" step="1" wire:model="grossIncome" placeholder="Ejemplo: 30000" />
+                                <flux:input type="number" min="1" step="1" wire:model="grossIncome" placeholder="Ejemplo: 30.000" />
                                 <flux:error name="grossIncome" />
                             </flux:field>
                         </div>
                     </article>
 
                     <article class="irpf-soft-card rounded-2xl p-4">
-                        <flux:heading size="sm">Familia</flux:heading>
+                        <flux:heading size="sm">Situación familiar</flux:heading>
                         <div class="mt-3 space-y-3">
                             <flux:field>
-                                <flux:label>Numero de hijos</flux:label>
+                                <flux:label>Número de hijos</flux:label>
                                 <flux:input type="number" min="0" step="1" wire:model="children" />
                                 <flux:error name="children" />
                             </flux:field>
 
                             <div class="rounded-xl border border-dashed border-[var(--irpf-line)] px-3 py-2 text-xs text-[var(--irpf-muted)]">
-                                Proximamente: discapacidad, ascendientes y otros factores familiares.
+                                Próximamente: discapacidad, ascendientes y otros factores familiares.
                             </div>
                         </div>
                     </article>
 
                     <article class="irpf-soft-card rounded-2xl p-4">
-                        <flux:heading size="sm">Deducciones (MVP)</flux:heading>
+                        <flux:heading size="sm">Deducciones y ajustes</flux:heading>
                         <div class="mt-3 space-y-3">
                             @if ($regionSlug === 'ceuta_melilla')
                                 <p class="text-sm text-[var(--irpf-muted)]">
-                                    Bonificacion Ceuta/Melilla activa: se aplica automaticamente una deduccion del 60% sobre la cuota.
+                                    Bonificación Ceuta/Melilla activa: se aplica automáticamente una deducción del 60% sobre la cuota.
                                 </p>
                             @else
                                 <p class="text-sm text-[var(--irpf-muted)]">
-                                    La bonificacion Ceuta/Melilla (60%) se aplica automaticamente al seleccionar
-                                    <strong class="text-[var(--irpf-ink)]">Ceuta y Melilla (bonificacion 60%)</strong>
+                                    La bonificación Ceuta/Melilla (60%) se aplica automáticamente al seleccionar
+                                    <strong class="text-[var(--irpf-ink)]">Ceuta y Melilla (bonificación 60%)</strong>
                                     como comunidad.
                                 </p>
                             @endif
                             <p class="text-xs text-[var(--irpf-muted)]">
-                                El resto de deducciones avanzadas se incorporaran en versiones posteriores.
+                                El resto de deducciones avanzadas se incorporará en versiones posteriores.
                             </p>
                         </div>
                     </article>
@@ -221,19 +221,19 @@
                             Enlace copiado
                         </p>
                         <p x-cloak x-show="copyError" x-transition.opacity.duration.250ms class="text-xs font-medium text-[var(--irpf-amber)]">
-                            No se pudo copiar automaticamente
+                            No se pudo copiar automáticamente
                         </p>
                     </div>
                 </form>
 
                 <p class="mt-4 text-xs text-[var(--irpf-muted)]">
-                    Simulador en desarrollo con tablas y supuestos simplificados para fines educativos.
+                    Resultado orientativo para fines informativos. No constituye asesoría fiscal profesional.
                 </p>
             </section>
 
             <section class="irpf-panel rounded-3xl p-5 md:p-7">
                 <flux:heading size="xl" class="irpf-display text-4xl text-[var(--irpf-ink)] md:text-5xl">Resultado</flux:heading>
-                <flux:text class="mt-2 text-sm text-[var(--irpf-muted)]">Resumen fiscal y detalle de calculo.</flux:text>
+                <flux:text class="mt-2 text-sm text-[var(--irpf-muted)]">Resumen fiscal y detalle de cálculo.</flux:text>
 
                 <flux:callout color="red" icon="exclamation-triangle" class="mt-4 rounded-2xl {{ $domainError === null ? 'hidden' : '' }}">
                     <flux:callout.heading>{{ $isUnsupportedForalError ? 'Régimen foral no incluido por ahora' : 'Error de cálculo' }}</flux:callout.heading>
@@ -251,14 +251,14 @@
                 <flux:callout color="amber" icon="shield-exclamation" class="mt-4 rounded-2xl">
                     <flux:callout.heading>Aviso importante</flux:callout.heading>
                     <flux:callout.text>
-                        Esta calculadora ofrece un calculo aproximado del IRPF con fines informativos y educativos.
-                        No constituye asesoria fiscal profesional. Para decisiones importantes, consulta con una persona profesional o la Agencia Tributaria.
+                        Esta calculadora ofrece un cálculo aproximado del IRPF con fines informativos y educativos.
+                        No constituye asesoría fiscal profesional. Para decisiones relevantes, consulta con una persona profesional o con la Agencia Tributaria.
                     </flux:callout.text>
                 </flux:callout>
 
                 <flux:callout color="amber" icon="information-circle" class="mt-5 rounded-2xl {{ $hasResult ? 'hidden' : '' }}">
                     <flux:callout.heading>Introduce tus datos y calcula</flux:callout.heading>
-                    <flux:callout.text>Veras aqui el resumen y el detalle orientativo del calculo.</flux:callout.text>
+                    <flux:callout.text>Verás aquí el resumen y el detalle orientativo del cálculo.</flux:callout.text>
                 </flux:callout>
 
                 <div class="{{ $hasResult ? '' : 'hidden' }}">
@@ -268,7 +268,7 @@
                             <p class="mt-2 text-2xl font-semibold text-[var(--irpf-ink)]">{{ number_format($grossIncomeEur, 2, ',', '.') }} EUR</p>
                         </article>
                         <article class="irpf-soft-card rounded-2xl p-4">
-                            <p class="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--irpf-muted)]">Minimo personal + familiar</p>
+                            <p class="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--irpf-muted)]">Mínimo personal + familiar</p>
                             <p class="mt-2 text-2xl font-semibold text-[var(--irpf-ink)]">{{ number_format($personalMinimumEur + $familyMinimumEur, 2, ',', '.') }} EUR</p>
                         </article>
                         <article class="irpf-soft-card rounded-2xl p-4">
@@ -286,28 +286,28 @@
                     </div>
 
                     <div class="mt-5">
-                        <p class="mb-2 text-sm font-medium text-[var(--irpf-muted)]">Ver detalle del calculo</p>
+                        <p class="mb-2 text-sm font-medium text-[var(--irpf-muted)]">Ver detalle del cálculo</p>
 
                         <details class="irpf-soft-card rounded-2xl p-4">
-                            <summary data-breakdown-summary class="cursor-pointer text-sm font-semibold text-[var(--irpf-ink)]">Detalle minimos</summary>
+                            <summary data-breakdown-summary class="cursor-pointer text-sm font-semibold text-[var(--irpf-ink)]">Detalle de mínimos</summary>
                             <div class="mt-3 grid gap-2 text-sm text-[var(--irpf-muted)]">
-                                <p>Minimo personal: <strong class="text-[var(--irpf-ink)]">{{ number_format($personalMinimumEur, 2, ',', '.') }} EUR</strong></p>
-                                <p>Minimo familiar: <strong class="text-[var(--irpf-ink)]">{{ number_format($familyMinimumEur, 2, ',', '.') }} EUR</strong></p>
+                                <p>Mínimo personal: <strong class="text-[var(--irpf-ink)]">{{ number_format($personalMinimumEur, 2, ',', '.') }} EUR</strong></p>
+                                <p>Mínimo familiar: <strong class="text-[var(--irpf-ink)]">{{ number_format($familyMinimumEur, 2, ',', '.') }} EUR</strong></p>
                             </div>
                         </details>
 
                         <details class="irpf-soft-card mt-3 rounded-2xl p-4">
-                            <summary data-breakdown-summary class="cursor-pointer text-sm font-semibold text-[var(--irpf-ink)]">Detalle cuota estatal/autonomica</summary>
+                            <summary data-breakdown-summary class="cursor-pointer text-sm font-semibold text-[var(--irpf-ink)]">Detalle de cuota estatal y autonómica</summary>
                             <div class="mt-3 grid gap-2 text-sm text-[var(--irpf-muted)]">
                                 <p>Cuota estatal: <strong class="text-[var(--irpf-ink)]">{{ number_format($stateTaxEur, 2, ',', '.') }} EUR</strong></p>
-                                <p>Cuota autonomica: <strong class="text-[var(--irpf-ink)]">{{ number_format($regionalTaxEur, 2, ',', '.') }} EUR</strong></p>
-                                <p>Cuota antes de bonificacion Ceuta/Melilla: <strong class="text-[var(--irpf-ink)]">{{ number_format($grossTaxEur, 2, ',', '.') }} EUR</strong></p>
+                                <p>Cuota autonómica: <strong class="text-[var(--irpf-ink)]">{{ number_format($regionalTaxEur, 2, ',', '.') }} EUR</strong></p>
+                                <p>Cuota antes de bonificación Ceuta/Melilla: <strong class="text-[var(--irpf-ink)]">{{ number_format($grossTaxEur, 2, ',', '.') }} EUR</strong></p>
                                 @if ($ceutaMelillaDeductionEur > 0)
-                                    <p>Bonificacion Ceuta/Melilla (60%): <strong class="text-[var(--irpf-teal)]">-{{ number_format($ceutaMelillaDeductionEur, 2, ',', '.') }} EUR</strong></p>
+                                    <p>Bonificación Ceuta/Melilla (60%): <strong class="text-[var(--irpf-teal)]">-{{ number_format($ceutaMelillaDeductionEur, 2, ',', '.') }} EUR</strong></p>
                                 @endif
                                 <p>Cuota total a pagar: <strong class="text-[var(--irpf-amber)]">{{ number_format($totalTaxEur, 2, ',', '.') }} EUR</strong></p>
                                 <p class="pt-1 text-xs text-[var(--irpf-muted)]">
-                                    Nota: esta bonificacion se muestra con una simplificacion del 60% sobre la cuota agregada.
+                                    Nota: esta bonificación se muestra con una simplificación del 60% sobre la cuota agregada.
                                 </p>
                             </div>
                         </details>
@@ -316,7 +316,7 @@
                             <summary data-breakdown-summary class="cursor-pointer text-sm font-semibold text-[var(--irpf-ink)]">Tramos aplicados</summary>
                             <div class="mt-3 grid gap-2 text-sm text-[var(--irpf-muted)]">
                                 <p>Tramos estatales aplicados: <strong class="text-[var(--irpf-ink)]">{{ $stateBracketsCount }}</strong></p>
-                                <p>Tramos autonomicos aplicados: <strong class="text-[var(--irpf-ink)]">{{ $regionalBracketsCount }}</strong></p>
+                                <p>Tramos autonómicos aplicados: <strong class="text-[var(--irpf-ink)]">{{ $regionalBracketsCount }}</strong></p>
                             </div>
                         </details>
                     </div>
@@ -324,11 +324,10 @@
             </section>
         </main>
 
-        <!-- Reserva de altura para evitar CLS cuando se carguen anuncios en futuras integraciones -->
         <section class="ad-slot irpf-soft-card min-h-32 rounded-3xl p-5" aria-label="Espacio para anuncios">
             <p class="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--irpf-muted)]">Espacio para anuncios</p>
             <p class="mt-2 text-sm text-[var(--irpf-muted)]">
-                Zona reservada para integraciones futuras de publicidad (Google Ads u otros), sin scripts de terceros en este MVP.
+                Zona reservada para futuras integraciones publicitarias, sin afectar el contenido principal de la calculadora.
             </p>
         </section>
     </div>

@@ -31,6 +31,11 @@ class RegionInfoPage extends Component
     public string $seoDescription;
 
     /**
+     * @var array<string, string>
+     */
+    public array $regionOptions = [];
+
+    /**
      * @var array<int, array<string, mixed>>
      */
     public array $exampleResults = [];
@@ -59,9 +64,10 @@ class RegionInfoPage extends Component
 
         $this->year = $year;
         $this->regionSlug = $regionSlug;
+        $this->regionOptions = $this->buildRegionOptions();
         $this->regionName = $this->labelForRegion($region);
-        $this->seoTitle = "IRPF {$this->year} en {$this->regionName}: tramos, tipos y ejemplo de calculo";
-        $this->seoDescription = "Consulta los tramos de IRPF {$this->year} en {$this->regionName}, minimos personales y familiares, y un ejemplo de calculo aproximado con nuestra calculadora.";
+        $this->seoTitle = "IRPF {$this->year} en {$this->regionName}: tramos, tipos y ejemplo de cálculo";
+        $this->seoDescription = "Consulta los tramos de IRPF {$this->year} en {$this->regionName}, mínimos personales y familiares, y un ejemplo de cálculo aproximado con nuestra calculadora.";
         $this->exampleResults = [];
 
         $this->loadBrackets($year, $region);
@@ -182,6 +188,20 @@ class RegionInfoPage extends Component
     private function formatEuro(int $amountInCents): string
     {
         return number_format($amountInCents / 100, 2, ',', '.').' EUR';
+    }
+
+    /**
+     * @return array<string, string>
+     */
+    private function buildRegionOptions(): array
+    {
+        $options = [];
+
+        foreach (Region::cases() as $region) {
+            $options[$region->value] = $this->labelForRegion($region);
+        }
+
+        return $options;
     }
 
     private function labelForRegion(Region $region): string

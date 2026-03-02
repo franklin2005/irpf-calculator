@@ -1,39 +1,39 @@
 <x-layouts.app
-    title="Politica de cookies - Calculadora IRPF Espana"
-    meta-description="Informacion sobre cookies tecnicas y futuras integraciones de analitica o publicidad."
+    title="Política de cookies - Calculadora IRPF España"
+    meta-description="Información sobre cookies técnicas y posibles integraciones futuras de análisis o publicidad."
     :canonical="route('legal.cookies')"
 >
     <main class="irpf-app-bg min-h-screen px-4 py-10 md:px-8">
         <article class="mx-auto w-full max-w-4xl irpf-panel rounded-3xl p-6 md:p-8">
-            <h1 class="irpf-display text-5xl leading-none text-[var(--irpf-ink)] md:text-6xl">Politica de cookies</h1>
+            <h1 class="irpf-display text-5xl leading-none text-[var(--irpf-ink)] md:text-6xl">Política de cookies</h1>
 
             <section class="mt-6">
-                <h2 class="text-xl font-semibold text-[var(--irpf-ink)]">Que es una cookie</h2>
+                <h2 class="text-xl font-semibold text-[var(--irpf-ink)]">Qué es una cookie</h2>
                 <p class="mt-2 text-sm text-[var(--irpf-muted)]">
-                    Una cookie es un pequeno archivo que se almacena en el navegador para recordar informacion tecnica sobre la navegacion.
+                    Una cookie es un pequeño archivo que se almacena en el navegador para recordar información técnica sobre la navegación.
                 </p>
             </section>
 
             <section class="mt-6">
                 <h2 class="text-xl font-semibold text-[var(--irpf-ink)]">Uso actual de cookies</h2>
                 <p class="mt-2 text-sm text-[var(--irpf-muted)]">
-                    Actualmente el sitio puede usar cookies tecnicas minimas necesarias para su funcionamiento.
+                    Actualmente, el sitio puede usar cookies técnicas mínimas necesarias para su funcionamiento.
                 </p>
             </section>
 
             <section class="mt-6">
-                <h2 class="text-xl font-semibold text-[var(--irpf-ink)]">Analitica y publicidad en el futuro</h2>
+                <h2 class="text-xl font-semibold text-[var(--irpf-ink)]">Análisis y publicidad en el futuro</h2>
                 <p class="mt-2 text-sm text-[var(--irpf-muted)]">
-                    Si se integran herramientas como Google Analytics o Google Ads, podran utilizarse cookies de analitica o publicidad.
-                    Esta politica se actualizara antes de activar dichas integraciones.
+                    Si se integran herramientas como Google Analytics o Google Ads, podrían utilizarse cookies de análisis o publicidad.
+                    Esta política se actualizará antes de activar dichas integraciones.
                 </p>
             </section>
 
             <section class="mt-6">
-                <h2 class="text-xl font-semibold text-[var(--irpf-ink)]">Gestion de cookies</h2>
+                <h2 class="text-xl font-semibold text-[var(--irpf-ink)]">Gestión de cookies</h2>
                 <p class="mt-2 text-sm text-[var(--irpf-muted)]">
                     Puedes configurar o bloquear cookies desde las opciones de tu navegador.
-                    Proximamente se habilitara un banner para gestionar el consentimiento desde la propia web.
+                    Próximamente se habilitará un banner para gestionar el consentimiento desde la propia web.
                 </p>
             </section>
         </article>

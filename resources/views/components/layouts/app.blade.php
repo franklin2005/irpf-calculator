@@ -1,4 +1,4 @@
-﻿@props([
+@props([
     'title' => null,
     'metaDescription' => null,
     'canonical' => null,
@@ -13,15 +13,15 @@
     $sectionCanonical = trim($__env->yieldContent('canonical'));
 
     $fallbackTitle = match ($routeName) {
-        'home' => 'Calculadora IRPF 2026 para Espana - Explicacion y acceso',
-        'irpf.calculator' => 'Calculadora IRPF '.($routeYear ?? 2026).' Asturias - Simulador de IRPF estimado',
-        default => 'Calculadora IRPF Espana',
+        'home' => 'Calculadora de IRPF en España por año y comunidad autónoma',
+        'irpf.calculator' => 'Calculadora IRPF '.($routeYear ?? 2026).' por comunidades autónomas',
+        default => 'Calculadora de IRPF en España',
     };
 
     $fallbackMetaDescription = match ($routeName) {
-        'home' => 'Calculadora IRPF 2026 para Espana con explicacion del MVP y acceso al simulador de Asturias.',
-        'irpf.calculator' => 'Calculadora IRPF 2026 para Asturias con simulacion estimada de cuota total y tipo efectivo.',
-        default => 'Calculadora IRPF para Espana con calculo estimado del impuesto sobre la renta. Proyecto educativo, no asesoria fiscal.',
+        'home' => 'Calcula de forma orientativa tu IRPF por año y comunidad autónoma en España (régimen común).',
+        'irpf.calculator' => 'Simula de forma aproximada tu cuota de IRPF por año y comunidad autónoma del régimen común.',
+        default => 'Herramienta informativa para estimar el IRPF en España. Resultado orientativo, no constituye asesoría fiscal.',
     };
 
     $resolvedTitle = $routeName === 'irpf.calculator'
@@ -75,12 +75,13 @@
     <body class="min-h-screen bg-[var(--irpf-bg)] text-[var(--irpf-ink)] antialiased selection:bg-cyan-300/20">
         <header class="border-b border-[var(--irpf-line)]/60 bg-black/20">
             <nav class="mx-auto flex w-full max-w-6xl items-center justify-between px-4 py-3 md:px-8">
-                <a href="{{ route('home') }}" class="text-sm font-semibold uppercase tracking-[0.16em] text-[var(--irpf-teal)]">
-                    IRPF 2026
+                <a href="{{ route('home', [], false) }}" wire:navigate class="text-sm font-semibold uppercase tracking-[0.16em] text-[var(--irpf-teal)]">
+                    IRPF España
                 </a>
                 <div class="flex items-center gap-4 text-sm text-[var(--irpf-muted)]">
-                    <a href="{{ route('home') }}" class="transition hover:text-[var(--irpf-ink)]">Inicio</a>
-                    <a href="{{ route('irpf.calculator', ['year' => 2026]) }}" class="transition hover:text-[var(--irpf-ink)]">Calculadora</a>
+                    <a href="{{ route('home', [], false) }}" wire:navigate class="transition hover:text-[var(--irpf-ink)]">Inicio</a>
+                    <a href="{{ route('irpf.calculator', ['year' => 2026], false) }}" wire:navigate class="transition hover:text-[var(--irpf-ink)]">Calculadora 2026</a>
+                    <a href="{{ route('irpf.region.show', ['year' => 2026, 'regionSlug' => 'asturias'], false) }}" wire:navigate class="transition hover:text-[var(--irpf-ink)]">Información CCAA</a>
                 </div>
             </nav>
         </header>
@@ -90,16 +91,16 @@
         <footer class="border-t border-[var(--irpf-line)]/60 bg-black/20">
             <div class="mx-auto w-full max-w-6xl px-4 py-4 text-xs text-[var(--irpf-muted)] md:px-8">
                 <div class="flex flex-wrap items-center gap-3">
-                    <a href="{{ route('home') }}" class="transition hover:text-[var(--irpf-ink)]">Inicio</a>
-                    <a href="{{ route('irpf.calculator', ['year' => 2026]) }}" class="transition hover:text-[var(--irpf-ink)]">Calculadora 2026</a>
-                    <a href="{{ route('legal.notice') }}" class="transition hover:text-[var(--irpf-ink)]">Aviso legal</a>
-                    <a href="{{ route('legal.privacy') }}" class="transition hover:text-[var(--irpf-ink)]">Politica de privacidad</a>
-                    <a href="{{ route('legal.cookies') }}" class="transition hover:text-[var(--irpf-ink)]">Politica de cookies</a>
+                    <a href="{{ route('home', [], false) }}" wire:navigate class="transition hover:text-[var(--irpf-ink)]">Inicio</a>
+                    <a href="{{ route('irpf.calculator', ['year' => 2026], false) }}" wire:navigate class="transition hover:text-[var(--irpf-ink)]">Calculadora 2026</a>
+                    <a href="{{ route('legal.notice', [], false) }}" wire:navigate class="transition hover:text-[var(--irpf-ink)]">Aviso legal</a>
+                    <a href="{{ route('legal.privacy', [], false) }}" wire:navigate class="transition hover:text-[var(--irpf-ink)]">Política de privacidad</a>
+                    <a href="{{ route('legal.cookies', [], false) }}" wire:navigate class="transition hover:text-[var(--irpf-ink)]">Política de cookies</a>
                 </div>
-                <p class="mt-3">Proyecto educativo de simulacion IRPF. Resultado orientativo.</p>
+                <p class="mt-3">Resultado orientativo para el régimen común del IRPF en España.</p>
                 <p class="mt-2">
-                    Este sitio puede utilizar cookies tecnicas y, en el futuro, herramientas de analisis o publicidad.
-                    Consulta la <a href="{{ route('legal.cookies') }}" class="underline underline-offset-2 transition hover:text-[var(--irpf-ink)]">Politica de cookies</a>.
+                    Este sitio puede utilizar cookies técnicas para su funcionamiento y, en su caso, herramientas de análisis.
+                    Consulta la <a href="{{ route('legal.cookies', [], false) }}" wire:navigate class="underline underline-offset-2 transition hover:text-[var(--irpf-ink)]">Política de cookies</a>.
                 </p>
             </div>
         </footer>

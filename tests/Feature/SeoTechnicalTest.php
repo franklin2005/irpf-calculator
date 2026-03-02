@@ -35,7 +35,7 @@ class SeoTechnicalTest extends TestCase
 
         $response
             ->assertOk()
-            ->assertSee('Calculadora IRPF 2026 para Espana');
+            ->assertSee('Calculadora IRPF 2025 y 2026 por comunidades');
     }
 
     public function test_calculator_page_renders_expected_title_and_canonical_without_query(): void
@@ -44,7 +44,7 @@ class SeoTechnicalTest extends TestCase
 
         $response
             ->assertOk()
-            ->assertSee('<title>Calculadora IRPF 2026 Asturias - Simulador de IRPF estimado</title>', false)
+            ->assertSee('<title>Calculadora IRPF 2026 por comunidades', false)
             ->assertSee('<link rel="canonical" href="'.url('/calculadora-irpf/2026').'">', false);
     }
 
@@ -82,6 +82,6 @@ class SeoTechnicalTest extends TestCase
 
         $response
             ->assertNotFound()
-            ->assertSee('Pagina no encontrada');
+            ->assertSee('Error 404');
     }
 }

@@ -46,8 +46,16 @@ composer analyse
 ```
 
 ## Screenshots
-In the `screenshots/` folder (project root) you can find current application screenshots:
+Screenshots are available in `screenshots/` (project root).
 
-- Home: `screenshots/home.png`, `screenshots/home2.png`
-- Calculator: `screenshots/calculadora.png`, `screenshots/calculadora2.png`
-- Region information page: `screenshots/info.png`, `screenshots/info2.png`
+### Home
+![Home - view 1](screenshots/home.png)
+![Home - view 2](screenshots/home2.png)
+
+### Calculator
+![Calculator - view 1](screenshots/calculadora.png)
+![Calculator - view 2](screenshots/calculadora2.png)
+
+### Region information
+![Region information - view 1](screenshots/info.png)
+![Region information - view 2](screenshots/info2.png)

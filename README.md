@@ -46,8 +46,16 @@ composer analyse
 ```
 
 ## Capturas de pantalla
-En la carpeta `screenshots/` (raíz del proyecto) tienes capturas actuales de la aplicación:
+Las capturas están en `screenshots/` (raíz del proyecto).
 
-- Home: `screenshots/home.png`, `screenshots/home2.png`
-- Calculadora: `screenshots/calculadora.png`, `screenshots/calculadora2.png`
-- Información por comunidad: `screenshots/info.png`, `screenshots/info2.png`
+### Home
+![Home - vista 1](screenshots/home.png)
+![Home - vista 2](screenshots/home2.png)
+
+### Calculadora
+![Calculadora - vista 1](screenshots/calculadora.png)
+![Calculadora - vista 2](screenshots/calculadora2.png)
+
+### Información por comunidad
+![Información por comunidad - vista 1](screenshots/info.png)
+![Información por comunidad - vista 2](screenshots/info2.png)

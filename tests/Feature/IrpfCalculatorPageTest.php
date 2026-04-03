@@ -59,6 +59,15 @@ class IrpfCalculatorPageTest extends TestCase
             });
     }
 
+    public function test_livewire_component_shows_inline_error_for_invalid_gross_income(): void
+    {
+        Livewire::test(IrpfCalculatorPage::class, ['year' => 2026])
+            ->set('grossIncome', null)
+            ->call('calculate')
+            ->assertHasErrors(['grossIncome' => ['required']])
+            ->assertSee('Debes indicar los ingresos brutos anuales.');
+    }
+
     public function test_livewire_component_applies_ceuta_melilla_bonus_when_region_slug_is_ceuta_melilla(): void
     {
         $normalCalculation = Livewire::test(IrpfCalculatorPage::class, ['year' => 2026])

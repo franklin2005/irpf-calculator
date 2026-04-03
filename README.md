@@ -1,5 +1,7 @@
 # IRPF Calculator
 
+English version: [README.en.md](README.en.md)
+
 ## Objetivo
 Aplicación para calcular IRPF en España con renderizado del lado del servidor (SSR), interfaz reactiva con Livewire y componentes UI con Flux.
 

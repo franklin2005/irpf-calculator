@@ -44,3 +44,10 @@ Optional commands (if defined in `composer.json`):
 composer lint
 composer analyse
 ```
+
+## Screenshots
+In the `screenshots/` folder (project root) you can find current application screenshots:
+
+- Home: `screenshots/home.png`, `screenshots/home2.png`
+- Calculator: `screenshots/calculadora.png`, `screenshots/calculadora2.png`
+- Region information page: `screenshots/info.png`, `screenshots/info2.png`

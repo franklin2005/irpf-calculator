@@ -44,3 +44,10 @@ Comandos opcionales (si están definidos en `composer.json`):
 composer lint
 composer analyse
 ```
+
+## Capturas de pantalla
+En la carpeta `screenshots/` (raíz del proyecto) tienes capturas actuales de la aplicación:
+
+- Home: `screenshots/home.png`, `screenshots/home2.png`
+- Calculadora: `screenshots/calculadora.png`, `screenshots/calculadora2.png`
+- Información por comunidad: `screenshots/info.png`, `screenshots/info2.png`
